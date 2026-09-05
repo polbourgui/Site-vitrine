@@ -54,7 +54,7 @@ ul { list-style: none; margin: 0; padding: 0; }
 }
 .skip-link:focus { left: 16px; top: 16px; }
 
-/* ---------- Light rig (parallax beams) ---------- */
+/* ---------- Light rig (parallax halos) ---------- */
 .light-rig {
   position: fixed;
   inset: 0;
@@ -62,42 +62,36 @@ ul { list-style: none; margin: 0; padding: 0; }
   overflow: hidden;
   pointer-events: none;
 }
-.beam {
+.halo {
   position: absolute;
-  top: -30%;
-  width: 220px;
-  height: 160vh;
-  clip-path: polygon(46% 0%, 54% 0%, 100% 100%, 0% 100%);
-  filter: blur(36px);
+  border-radius: 50%;
+  filter: blur(70px);
   mix-blend-mode: screen;
-  opacity: 0.4;
+  opacity: 0.65;
   will-change: transform;
-  animation: beam-breathe 9s ease-in-out infinite;
+  animation: halo-pulse 11s ease-in-out infinite;
 }
-.beam--amber {
-  background: linear-gradient(180deg, rgba(214, 162, 76, 0) 0%, rgba(214, 162, 76, 0.55) 45%, rgba(214, 162, 76, 0) 100%);
-}
-.beam--blue {
-  background: linear-gradient(180deg, rgba(127, 163, 201, 0) 0%, rgba(127, 163, 201, 0.5) 45%, rgba(127, 163, 201, 0) 100%);
-}
-.beam-1 { left: 4%;  width: 180px; transform: rotate(-14deg); animation-delay: 0s; }
-.beam-2 { left: 24%; width: 260px; transform: rotate(9deg);   animation-delay: 1.4s; }
-.beam-3 { left: 52%; width: 200px; transform: rotate(-6deg);  animation-delay: 2.8s; }
-.beam-4 { left: 74%; width: 240px; transform: rotate(16deg);  animation-delay: 0.6s; }
-.beam-5 { left: 90%; width: 160px; transform: rotate(-20deg); animation-delay: 3.6s; }
+.halo--amber { background: radial-gradient(circle, rgba(214, 162, 76, 0.9) 0%, rgba(214, 162, 76, 0) 70%); }
+.halo--blue  { background: radial-gradient(circle, rgba(127, 163, 201, 0.85) 0%, rgba(127, 163, 201, 0) 70%); }
 
-@keyframes beam-breathe {
-  0%, 100% { opacity: 0.28; }
-  50% { opacity: 0.5; }
+.halo-1 { left: -8%; top: 2%;   width: 520px; height: 520px; animation-delay: 0s; }
+.halo-2 { left: 60%; top: -10%; width: 640px; height: 640px; animation-delay: 2s; }
+.halo-3 { left: 28%; top: 42%;  width: 480px; height: 480px; animation-delay: 4s; }
+.halo-4 { left: 80%; top: 56%;  width: 580px; height: 580px; animation-delay: 1s; }
+.halo-5 { left: 2%;  top: 78%;  width: 520px; height: 520px; animation-delay: 3s; }
+
+@keyframes halo-pulse {
+  0%, 100% { opacity: 0.48; }
+  50% { opacity: 0.8; }
 }
 
 @media (max-width: 640px) {
-  .beam-4, .beam-5 { display: none; }
-  .beam { filter: blur(24px); }
+  .halo-4, .halo-5 { display: none; }
+  .halo { filter: blur(50px); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .beam { animation: none; opacity: 0.32; }
+  .halo { animation: none; opacity: 0.55; }
 }
 
 /* ---------- Buttons ---------- */

@@ -21,22 +21,21 @@
     });
   }
 
-  // Parallax light beams
-  var beams = document.querySelectorAll(".light-rig .beam");
-  if (beams.length && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  // Parallax light halos
+  var halos = document.querySelectorAll(".light-rig .halo");
+  if (halos.length && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     var travel = window.innerHeight * 1.6;
     window.addEventListener("resize", function () {
       travel = window.innerHeight * 1.6;
     });
 
     var ticking = false;
-    var updateBeams = function () {
+    var updateHalos = function () {
       var y = window.scrollY || window.pageYOffset;
-      beams.forEach(function (beam) {
-        var speed = parseFloat(beam.dataset.speed) || 0.2;
-        var rotate = parseFloat(beam.dataset.rotate) || 0;
+      halos.forEach(function (halo) {
+        var speed = parseFloat(halo.dataset.speed) || 0.2;
         var offset = travel ? (y * speed) % travel : y * speed;
-        beam.style.transform = "translate3d(0, " + (-offset).toFixed(1) + "px, 0) rotate(" + rotate + "deg)";
+        halo.style.transform = "translate3d(0, " + (-offset).toFixed(1) + "px, 0)";
       });
       ticking = false;
     };
@@ -44,13 +43,13 @@
       "scroll",
       function () {
         if (!ticking) {
-          window.requestAnimationFrame(updateBeams);
+          window.requestAnimationFrame(updateHalos);
           ticking = true;
         }
       },
       { passive: true }
     );
-    updateBeams();
+    updateHalos();
   }
 
   // Reveal on scroll
