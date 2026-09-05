@@ -8,7 +8,6 @@ Site statique one-page (HTML/CSS/JS, sans framework ni build) pour la micro-entr
 Ouvrez `index.html` dans un navigateur, ou lancez un serveur local :
 
 ```bash
-cd technotropisme-site
 python3 -m http.server 8000
 ```
 
@@ -16,8 +15,12 @@ Puis rendez-vous sur `http://localhost:8000`.
 
 ## Déploiement
 
-Le site est statique : il peut être déployé tel quel sur Netlify, Vercel, GitHub Pages ou tout
-hébergement mutualisé, en pointant sur le dossier `technotropisme-site/`.
+Le site est statique : il peut être déployé tel quel sur Netlify, Vercel, Cloudflare Pages,
+GitHub Pages ou tout hébergement mutualisé, en pointant sur la racine du dépôt.
+
+Sur Cloudflare Pages, la configuration attendue est :
+- **Build command** : (laisser vide)
+- **Build output directory** : `/`
 
 ## À personnaliser avant mise en ligne
 
@@ -34,7 +37,6 @@ hébergement mutualisé, en pointant sur le dossier `technotropisme-site/`.
 ## Structure
 
 ```
-technotropisme-site/
 ├── index.html        Page unique (sections : accueil, services, secteurs, réalisations, à propos, contact)
 ├── css/styles.css     Thème sombre, accent ambré
 ├── js/main.js         Menu mobile, animations au scroll, envoi du formulaire
