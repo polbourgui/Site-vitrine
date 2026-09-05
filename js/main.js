@@ -21,6 +21,38 @@
     });
   }
 
+  // Parallax light beams
+  var beams = document.querySelectorAll(".light-rig .beam");
+  if (beams.length && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    var travel = window.innerHeight * 1.6;
+    window.addEventListener("resize", function () {
+      travel = window.innerHeight * 1.6;
+    });
+
+    var ticking = false;
+    var updateBeams = function () {
+      var y = window.scrollY || window.pageYOffset;
+      beams.forEach(function (beam) {
+        var speed = parseFloat(beam.dataset.speed) || 0.2;
+        var rotate = parseFloat(beam.dataset.rotate) || 0;
+        var offset = travel ? (y * speed) % travel : y * speed;
+        beam.style.transform = "translate3d(0, " + (-offset).toFixed(1) + "px, 0) rotate(" + rotate + "deg)";
+      });
+      ticking = false;
+    };
+    window.addEventListener(
+      "scroll",
+      function () {
+        if (!ticking) {
+          window.requestAnimationFrame(updateBeams);
+          ticking = true;
+        }
+      },
+      { passive: true }
+    );
+    updateBeams();
+  }
+
   // Reveal on scroll
   var revealTargets = document.querySelectorAll(
     ".card, .sector, .portfolio-placeholder, .about-text, .contact-inner > *"
