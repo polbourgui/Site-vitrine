@@ -65,33 +65,33 @@ ul { list-style: none; margin: 0; padding: 0; }
 .halo {
   position: absolute;
   border-radius: 50%;
-  filter: blur(70px);
+  filter: blur(90px);
   mix-blend-mode: screen;
-  opacity: 0.65;
+  opacity: 0.32;
   will-change: transform;
-  animation: halo-pulse 11s ease-in-out infinite;
+  animation: halo-pulse 16s ease-in-out infinite;
 }
-.halo--amber { background: radial-gradient(circle, rgba(214, 162, 76, 0.9) 0%, rgba(214, 162, 76, 0) 70%); }
-.halo--blue  { background: radial-gradient(circle, rgba(127, 163, 201, 0.85) 0%, rgba(127, 163, 201, 0) 70%); }
+.halo--amber { background: radial-gradient(circle, rgba(214, 162, 76, 0.8) 0%, rgba(214, 162, 76, 0) 70%); }
+.halo--blue  { background: radial-gradient(circle, rgba(127, 163, 201, 0.75) 0%, rgba(127, 163, 201, 0) 70%); }
 
-.halo-1 { left: -8%; top: 2%;   width: 520px; height: 520px; animation-delay: 0s; }
-.halo-2 { left: 60%; top: -10%; width: 640px; height: 640px; animation-delay: 2s; }
-.halo-3 { left: 28%; top: 42%;  width: 480px; height: 480px; animation-delay: 4s; }
-.halo-4 { left: 80%; top: 56%;  width: 580px; height: 580px; animation-delay: 1s; }
-.halo-5 { left: 2%;  top: 78%;  width: 520px; height: 520px; animation-delay: 3s; }
+/* Les halos débordent largement du viewport : seule leur périphérie
+   est visible, en tache de coin plutôt qu'en orbe flottant au centre. */
+.halo-1 { left: -24%; top: -20%; width: 760px; height: 760px; animation-delay: 0s; }
+.halo-2 { left: 70%;  top: 64%;  width: 820px; height: 820px; animation-delay: 5s; }
+.halo-3 { left: 88%;  top: 4%;   width: 540px; height: 540px; animation-delay: 9s; }
 
 @keyframes halo-pulse {
-  0%, 100% { opacity: 0.48; }
-  50% { opacity: 0.8; }
+  0%, 100% { opacity: 0.22; }
+  50% { opacity: 0.4; }
 }
 
 @media (max-width: 640px) {
-  .halo-4, .halo-5 { display: none; }
-  .halo { filter: blur(50px); }
+  .halo-3 { display: none; }
+  .halo { filter: blur(60px); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .halo { animation: none; opacity: 0.55; }
+  .halo { animation: none; opacity: 0.28; }
 }
 
 /* ---------- Buttons ---------- */
@@ -186,16 +186,6 @@ ul { list-style: none; margin: 0; padding: 0; }
   position: relative;
   padding: 120px 0 100px;
   overflow: hidden;
-}
-.hero-glow {
-  position: absolute;
-  top: -20%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 900px;
-  height: 900px;
-  background: radial-gradient(circle, rgba(214, 162, 76, 0.16) 0%, rgba(214, 162, 76, 0) 65%);
-  pointer-events: none;
 }
 .hero-inner { position: relative; max-width: 780px; }
 .eyebrow {
