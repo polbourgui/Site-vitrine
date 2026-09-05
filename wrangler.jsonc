@@ -1,0 +1,9 @@
+{
+  // Le nom doit correspondre exactement au nom du projet dans le tableau de bord
+  // Cloudflare (Workers & Pages) — renommez-le si besoin avant de redéployer.
+  "name": "site-vitrine",
+  "compatibility_date": "2026-09-05",
+  "assets": {
+    "directory": "./"
+  }
+}
