@@ -247,62 +247,61 @@ button { font: inherit; }
    à la console — jamais le texte lui-même. */
 .console-target {
   --console-glow: var(--console-glow-base, 0);
+  opacity: 1;
   transition: box-shadow 0.15s ease;
-}
-/* Pendant un effet, la transition ci-dessus lisserait/retarderait les
-   changements pourtant déjà animés par les keyframes (perceptible
-   surtout sur le créneau net du strobe) — on la désactive. */
-.console-target.is-strobing,
-.console-target.is-fx-breathe,
-.console-target.is-fx-fade {
-  transition: none;
 }
 .channel-dot.console-target {
   background: var(--console-color, var(--accent));
   box-shadow: 0 0 calc(var(--console-glow, 0) * 12px) calc(var(--console-glow, 0) * 4px) var(--console-color, var(--accent));
 }
-/* Trois formes de courbe structurellement différentes — pas seulement
-   une même bosse rejouée avec des réglages différents — pour que les
-   3 effets se distinguent vraiment à l'œil :
+/* Les effets animent `opacity` — une propriété nativement interpolée
+   par tous les navigateurs — plutôt que la variable --console-glow :
+   animer une custom property en douceur dépend du support de
+   @property, absent de certains navigateurs, ce qui provoquait un
+   saut net (0 à 100 %) au lieu d'un fondu. `opacity` module ici
+   uniformément le rendu déjà calculé (halo + point), sans dépendance
+   particulière.
+   Trois formes de courbe structurellement différentes — pas
+   seulement une même bosse rejouée à des vitesses différentes :
    - STROBE : créneau net, on/off, ~50/50.
    - BREATHE : une seule onde continue, douce (ease-in-out).
    - FADE : monte, tient, descend, tient (paliers), en rampe linéaire. */
 .console-target.is-strobing {
-  animation-name: glowPulse;
+  animation-name: fxStrobe;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
   animation-duration: var(--console-fx-duration, 0.5s);
 }
 .console-target.is-fx-breathe {
-  animation-name: glowBreathe;
+  animation-name: fxBreathe;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
   animation-duration: var(--console-fx-duration, 3s);
 }
 .console-target.is-fx-fade {
-  animation-name: glowFade;
+  animation-name: fxFade;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
   animation-duration: var(--console-fx-duration, 4s);
 }
-@keyframes glowPulse {
-  0%, 45% { --console-glow: var(--console-glow-base, 0.7); }
-  50%, 95% { --console-glow: calc(var(--console-glow-base, 0.7) * 0.15); }
-  100% { --console-glow: var(--console-glow-base, 0.7); }
+@keyframes fxStrobe {
+  0%, 45% { opacity: 1; }
+  50%, 95% { opacity: 0.15; }
+  100% { opacity: 1; }
 }
-@keyframes glowBreathe {
-  0%, 100% { --console-glow: calc(var(--console-glow-base, 0.7) * 0.35); }
-  50% { --console-glow: var(--console-glow-base, 0.7); }
+@keyframes fxBreathe {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
 }
-@keyframes glowFade {
-  0%, 10% { --console-glow: var(--console-glow-base, 0.7); }
-  40%, 60% { --console-glow: calc(var(--console-glow-base, 0.7) * 0.04); }
-  90%, 100% { --console-glow: var(--console-glow-base, 0.7); }
+@keyframes fxFade {
+  0%, 10% { opacity: 1; }
+  40%, 60% { opacity: 0.04; }
+  90%, 100% { opacity: 1; }
 }
 @media (prefers-reduced-motion: reduce) {
   .console-target.is-strobing,
   .console-target.is-fx-breathe,
-  .console-target.is-fx-fade { animation: none; }
+  .console-target.is-fx-fade { animation: none; opacity: 1; }
 }
 
 /* ---------- Mini-console (panneau flottant, déplaçable) ---------- */
