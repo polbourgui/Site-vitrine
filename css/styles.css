@@ -22,12 +22,6 @@
   initial-value: 0;
 }
 
-@property --console-glow {
-  syntax: '<number>';
-  inherits: false;
-  initial-value: 0;
-}
-
 @keyframes breathe {
   0%, 100% { --proximity: 0.08; }
   50% { --proximity: 0.26; }
