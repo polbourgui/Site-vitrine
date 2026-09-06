@@ -3,106 +3,133 @@
 
   var panel = document.querySelector(".mini-console");
   var header = document.getElementById("mc-header");
-  var fader = document.getElementById("mc-fader");
-  var track = document.getElementById("mc-track");
-  var cap = document.getElementById("mc-cap");
-  var valueEl = document.getElementById("mc-value");
-  var swatches = document.getElementById("mc-swatches");
-  var strobeBtn = document.getElementById("mc-strobe");
   var targets = Array.prototype.slice.call(document.querySelectorAll(".console-target"));
-  if (!fader || !track || !targets.length) return;
+  if (!panel || !targets.length) return;
 
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   var state = {
     intensity: 70,
-    color: "#e2812c",
-    strobe: false,
+    r: 226,
+    g: 129,
+    b: 44,
+    speed: 50,
+    effect: "none", // "none" | "strobe" | "breathe" | "fade"
   };
+
+  // Durée d'un cycle complet (secondes) aux extrêmes de vitesse [lent, rapide],
+  // par effet — le strobe reste borné assez lent pour rester sous le seuil
+  // général de flash (3/s) même à vitesse maximale.
+  var FX_DURATION_RANGE = {
+    strobe: [1.6, 0.4],
+    breathe: [6, 1.5],
+    fade: [8, 2],
+  };
+
+  function currentColor() {
+    return "rgb(" + state.r + ", " + state.g + ", " + state.b + ")";
+  }
+
+  function fxDuration() {
+    var range = FX_DURATION_RANGE[state.effect];
+    if (!range) return null;
+    var t = state.speed / 100;
+    return (range[0] + (range[1] - range[0]) * t).toFixed(2) + "s";
+  }
 
   function apply() {
     var glow = state.intensity / 100;
+    var color = currentColor();
+    var duration = fxDuration();
+    var effectActive = state.effect !== "none" && !reduceMotion;
+
     targets.forEach(function (target) {
-      target.style.setProperty("--console-color", state.color);
+      target.style.setProperty("--console-color", color);
       target.style.setProperty("--console-glow-base", glow.toFixed(3));
-      target.classList.toggle("is-strobing", state.strobe && !reduceMotion);
+      target.style.setProperty("--console-fx-duration", duration || "");
+      target.classList.toggle("is-strobing", effectActive && state.effect === "strobe");
+      target.classList.toggle("is-fx-breathe", effectActive && state.effect === "breathe");
+      target.classList.toggle("is-fx-fade", effectActive && state.effect === "fade");
+    });
+  }
+
+  // ---- Fader générique : gère drag pointeur, clavier, et rendu visuel ----
+  function makeFader(el, track, cap, valueEl, opts) {
+    var value = opts.initial;
+
+    function render() {
+      var ratio = (value - opts.min) / (opts.max - opts.min);
+      cap.style.setProperty("--mc-value", ratio.toFixed(3));
+      if (valueEl) valueEl.textContent = String(Math.round(value)).padStart(opts.pad || 3, "0");
+      el.setAttribute("aria-valuenow", String(Math.round(value)));
+    }
+
+    function set(v) {
+      value = Math.min(opts.max, Math.max(opts.min, v));
+      render();
+      opts.onChange(value);
+    }
+
+    function fromClientPos(clientX, clientY) {
+      var rect = track.getBoundingClientRect();
+      var isRow = rect.width > rect.height;
+      var ratio = isRow ? (clientX - rect.left) / rect.width : 1 - (clientY - rect.top) / rect.height;
+      ratio = Math.max(0, Math.min(1, ratio));
+      set(opts.min + ratio * (opts.max - opts.min));
+    }
+
+    var dragging = false;
+    el.addEventListener("pointerdown", function (e) {
+      dragging = true;
+      el.setPointerCapture(e.pointerId);
+      fromClientPos(e.clientX, e.clientY);
+    });
+    el.addEventListener("pointermove", function (e) {
+      if (dragging) fromClientPos(e.clientX, e.clientY);
+    });
+    el.addEventListener("pointerup", function () { dragging = false; });
+    el.addEventListener("pointercancel", function () { dragging = false; });
+
+    el.addEventListener("keydown", function (e) {
+      var step = opts.step || Math.max(1, (opts.max - opts.min) / 20);
+      if (e.key === "ArrowUp" || e.key === "ArrowRight") { set(value + step); e.preventDefault(); }
+      else if (e.key === "ArrowDown" || e.key === "ArrowLeft") { set(value - step); e.preventDefault(); }
+      else if (e.key === "Home") { set(opts.min); e.preventDefault(); }
+      else if (e.key === "End") { set(opts.max); e.preventDefault(); }
     });
 
-    cap.style.setProperty("--mc-value", (state.intensity / 100).toFixed(3));
-    valueEl.textContent = String(state.intensity).padStart(3, "0");
-    fader.setAttribute("aria-valuenow", String(state.intensity));
+    render();
   }
 
-  function setIntensityFromClientPos(clientX, clientY) {
-    var rect = track.getBoundingClientRect();
-    var isRow = rect.width > rect.height;
-    var ratio;
-    if (isRow) {
-      ratio = (clientX - rect.left) / rect.width;
-    } else {
-      ratio = 1 - (clientY - rect.top) / rect.height;
-    }
-    ratio = Math.max(0, Math.min(1, ratio));
-    state.intensity = Math.round(ratio * 100);
-    apply();
+  function wireFader(prefix, min, max, initial, pad, onChange) {
+    var el = document.getElementById(prefix);
+    var track = document.getElementById(prefix.replace("mc-fader", "mc-track"));
+    var cap = document.getElementById(prefix.replace("mc-fader", "mc-cap"));
+    var valueEl = document.getElementById(prefix.replace("mc-fader", "mc-value"));
+    if (!el || !track || !cap) return;
+    makeFader(el, track, cap, valueEl, { min: min, max: max, initial: initial, pad: pad, onChange: onChange });
   }
 
-  var dragging = false;
-  fader.addEventListener("pointerdown", function (e) {
-    dragging = true;
-    fader.setPointerCapture(e.pointerId);
-    setIntensityFromClientPos(e.clientX, e.clientY);
-  });
-  fader.addEventListener("pointermove", function (e) {
-    if (dragging) setIntensityFromClientPos(e.clientX, e.clientY);
-  });
-  fader.addEventListener("pointerup", function () { dragging = false; });
-  fader.addEventListener("pointercancel", function () { dragging = false; });
+  wireFader("mc-fader", 0, 100, state.intensity, 3, function (v) { state.intensity = v; apply(); });
+  wireFader("mc-fader-r", 0, 255, state.r, 3, function (v) { state.r = Math.round(v); apply(); });
+  wireFader("mc-fader-g", 0, 255, state.g, 3, function (v) { state.g = Math.round(v); apply(); });
+  wireFader("mc-fader-b", 0, 255, state.b, 3, function (v) { state.b = Math.round(v); apply(); });
+  wireFader("mc-fader-speed", 0, 100, state.speed, 3, function (v) { state.speed = Math.round(v); apply(); });
 
-  fader.addEventListener("keydown", function (e) {
-    var step = 5;
-    if (e.key === "ArrowUp" || e.key === "ArrowRight") {
-      state.intensity = Math.min(100, state.intensity + step);
-      apply();
-      e.preventDefault();
-    } else if (e.key === "ArrowDown" || e.key === "ArrowLeft") {
-      state.intensity = Math.max(0, state.intensity - step);
-      apply();
-      e.preventDefault();
-    } else if (e.key === "Home") {
-      state.intensity = 0; apply(); e.preventDefault();
-    } else if (e.key === "End") {
-      state.intensity = 100; apply(); e.preventDefault();
-    }
-  });
-
-  if (swatches) {
-    swatches.querySelectorAll(".mc-swatch").forEach(function (btn) {
-      btn.style.setProperty("--swatch-color", btn.dataset.color);
+  var effectButtons = Array.prototype.slice.call(document.querySelectorAll(".mc-effect-btn"));
+  if (reduceMotion) {
+    effectButtons.forEach(function (btn) { btn.setAttribute("disabled", "true"); });
+  } else {
+    effectButtons.forEach(function (btn) {
       btn.addEventListener("click", function () {
-        state.color = btn.dataset.color;
-        swatches.querySelectorAll(".mc-swatch").forEach(function (b) {
-          var active = b === btn;
-          b.classList.toggle("is-active", active);
-          b.setAttribute("aria-pressed", String(active));
+        var chosen = btn.dataset.effect;
+        state.effect = state.effect === chosen ? "none" : chosen;
+        effectButtons.forEach(function (b) {
+          b.setAttribute("aria-pressed", String(b.dataset.effect === state.effect));
         });
         apply();
       });
     });
-  }
-
-  if (strobeBtn) {
-    if (reduceMotion) {
-      strobeBtn.setAttribute("disabled", "true");
-      strobeBtn.textContent = "STROBE — INDISPONIBLE";
-    } else {
-      strobeBtn.addEventListener("click", function () {
-        state.strobe = !state.strobe;
-        strobeBtn.setAttribute("aria-pressed", String(state.strobe));
-        strobeBtn.textContent = "STROBE — " + (state.strobe ? "ON" : "OFF");
-        apply();
-      });
-    }
   }
 
   if (panel && header) {
