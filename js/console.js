@@ -166,7 +166,7 @@
     });
 
     renderVisual(value);
-    return { renderOnly: renderVisual, get: function () { return value; } };
+    return { renderOnly: renderVisual };
   }
 
   var faders = {};
@@ -179,10 +179,16 @@
     faders[key] = makeFader(el, track, cap, valueEl, { min: min, max: max, initial: initial, pad: pad, onChange: onChange });
   }
 
+  function updateActiveTabColor(fx) {
+    if (!fixturesEl) return;
+    var tab = fixturesEl.querySelector(".mc-fixture-tab.is-active");
+    if (tab) tab.style.setProperty("--fixture-color", "rgb(" + fx.r + ", " + fx.g + ", " + fx.b + ")");
+  }
+
   wireFader("intensity", "mc-fader", 0, 100, 70, 3, function (v) { var fx = getActiveFixture(); fx.intensity = v; applyFixture(fx); });
-  wireFader("r", "mc-fader-r", 0, 255, fixtures[0].r, 3, function (v) { var fx = getActiveFixture(); fx.r = Math.round(v); applyFixture(fx); renderFixtureTabs(); });
-  wireFader("g", "mc-fader-g", 0, 255, fixtures[0].g, 3, function (v) { var fx = getActiveFixture(); fx.g = Math.round(v); applyFixture(fx); renderFixtureTabs(); });
-  wireFader("b", "mc-fader-b", 0, 255, fixtures[0].b, 3, function (v) { var fx = getActiveFixture(); fx.b = Math.round(v); applyFixture(fx); renderFixtureTabs(); });
+  wireFader("r", "mc-fader-r", 0, 255, fixtures[0].r, 3, function (v) { var fx = getActiveFixture(); fx.r = Math.round(v); applyFixture(fx); updateActiveTabColor(fx); });
+  wireFader("g", "mc-fader-g", 0, 255, fixtures[0].g, 3, function (v) { var fx = getActiveFixture(); fx.g = Math.round(v); applyFixture(fx); updateActiveTabColor(fx); });
+  wireFader("b", "mc-fader-b", 0, 255, fixtures[0].b, 3, function (v) { var fx = getActiveFixture(); fx.b = Math.round(v); applyFixture(fx); updateActiveTabColor(fx); });
   wireFader("speed", "mc-fader-speed", 0, 100, 50, 3, function (v) { var fx = getActiveFixture(); fx.speed = Math.round(v); applyFixture(fx); });
 
   // ---- Pan/Tilt : pavé XY ----
