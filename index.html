@@ -47,15 +47,14 @@
 
       <!-- ch.01 — Hero -->
       <section class="channel" id="hero" data-channel="1">
-        <div class="channel-inner hero-grid">
-
+        <div class="channel-inner">
           <div class="hero-copy">
             <p class="channel-tag">
-              <span class="channel-dot" aria-hidden="true"></span>
+              <span class="channel-dot console-target" aria-hidden="true"></span>
               CH.01 — HERO · INTENSITÉ <span class="intensity-value">100</span>%
             </p>
             <p class="eyebrow">Régie technique &amp; spectacle vivant</p>
-            <h1>Électricité, lumière et effets spéciaux, <span class="accent-live" id="console-target">au service de vos spectacles.</span></h1>
+            <h1>Électricité, lumière et effets spéciaux, <span class="accent-live console-target">au service de vos spectacles.</span></h1>
             <p class="hero-lead">
               Technotropisme conçoit et met en œuvre les dispositifs techniques de vos événements :
               électricité de puissance, éclairage scénique, effets spéciaux, réseau et électronique.
@@ -66,47 +65,6 @@
               <a href="#projets" class="btn btn-ghost">Voir les projets</a>
             </div>
           </div>
-
-          <div class="mini-console" aria-label="Mini-console lumière interactive">
-            <div class="mini-console-header">
-              <span class="mono-label">MINI-CONSOLE</span>
-              <span class="mono-label dim">À MANIPULER</span>
-            </div>
-
-            <div class="mini-console-body">
-              <div class="mc-fader-group">
-                <span class="mono-label dim">INTENSITÉ</span>
-                <div class="mc-fader" id="mc-fader" role="slider" tabindex="0"
-                     aria-label="Intensité de la couleur d'accroche" aria-valuemin="0" aria-valuemax="100" aria-valuenow="70">
-                  <div class="mc-track" id="mc-track">
-                    <div class="mc-cap proximity" id="mc-cap"></div>
-                  </div>
-                </div>
-                <span class="mono-label" id="mc-value">070</span>
-              </div>
-
-              <div class="mc-side">
-                <div class="mc-colors">
-                  <span class="mono-label dim">GÉLATINE</span>
-                  <div class="mc-swatches" id="mc-swatches" role="group" aria-label="Choix de couleur">
-                    <button type="button" class="mc-swatch proximity is-active" data-color="#e2812c" aria-label="Ambre" aria-pressed="true"></button>
-                    <button type="button" class="mc-swatch proximity" data-color="#c0392b" aria-label="Rouge" aria-pressed="false"></button>
-                    <button type="button" class="mc-swatch proximity" data-color="#5b7ea6" aria-label="CTB, bleu froid" aria-pressed="false"></button>
-                    <button type="button" class="mc-swatch proximity" data-color="#7a8f5c" aria-label="Vert scène" aria-pressed="false"></button>
-                    <button type="button" class="mc-swatch proximity" data-color="#8a4f8a" aria-label="Magenta" aria-pressed="false"></button>
-                  </div>
-                </div>
-
-                <div class="mc-strobe">
-                  <span class="mono-label dim">STROBE</span>
-                  <button type="button" class="mc-strobe-btn proximity" id="mc-strobe" aria-pressed="false">STROBE — OFF</button>
-                </div>
-              </div>
-            </div>
-
-            <p class="mc-note">Pilote en direct la couleur du texte d'accroche ci-contre — additif, jamais bloquant.</p>
-          </div>
-
         </div>
       </section>
 
@@ -114,7 +72,7 @@
       <section class="channel" id="projets" data-channel="2">
         <div class="channel-inner">
           <p class="channel-tag">
-            <span class="channel-dot" aria-hidden="true"></span>
+            <span class="channel-dot console-target" aria-hidden="true"></span>
             CH.02 — PROJETS · INTENSITÉ <span class="intensity-value">100</span>%
           </p>
           <h2>Réalisations</h2>
@@ -150,7 +108,7 @@
       <section class="channel" id="competences" data-channel="3">
         <div class="channel-inner">
           <p class="channel-tag">
-            <span class="channel-dot" aria-hidden="true"></span>
+            <span class="channel-dot console-target" aria-hidden="true"></span>
             CH.03 — COMPÉTENCES · INTENSITÉ <span class="intensity-value">100</span>%
           </p>
           <h2>Cinq savoir-faire, une seule interlocutrice.</h2>
@@ -197,7 +155,7 @@
 
           <div class="contact-intro">
             <p class="channel-tag">
-              <span class="channel-dot" aria-hidden="true"></span>
+              <span class="channel-dot console-target" aria-hidden="true"></span>
               CH.04 — CONTACT · INTENSITÉ <span class="intensity-value">100</span>%
             </p>
             <p class="about-note">Technotropisme est une micro-entreprise technique du spectacle vivant : une seule interlocutrice, de la conception à la mise en service, en dialogue avec vos équipes artistiques et techniques.</p>
@@ -258,6 +216,48 @@
     </div>
   </div>
 </main>
+
+<!-- Mini-console flottante : agit sur les indicateurs de canal (ch.01 à ch.04) partout sur le site -->
+<div class="mini-console" aria-label="Mini-console lumière interactive, déplaçable">
+  <div class="mini-console-header" id="mc-header">
+    <svg class="mc-grip" viewBox="0 0 16 16" aria-hidden="true"><circle cx="4" cy="4" r="1.2" fill="currentColor"/><circle cx="12" cy="4" r="1.2" fill="currentColor"/><circle cx="4" cy="8" r="1.2" fill="currentColor"/><circle cx="12" cy="8" r="1.2" fill="currentColor"/><circle cx="4" cy="12" r="1.2" fill="currentColor"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/></svg>
+    <span class="mono-label">MINI-CONSOLE</span>
+    <span class="mono-label dim">CH.01→04</span>
+  </div>
+
+  <div class="mini-console-body">
+    <div class="mc-fader-group">
+      <span class="mono-label dim">INTENSITÉ</span>
+      <div class="mc-fader" id="mc-fader" role="slider" tabindex="0"
+           aria-label="Intensité des indicateurs de canal" aria-valuemin="0" aria-valuemax="100" aria-valuenow="70">
+        <div class="mc-track" id="mc-track">
+          <div class="mc-cap proximity" id="mc-cap"></div>
+        </div>
+      </div>
+      <span class="mono-label" id="mc-value">070</span>
+    </div>
+
+    <div class="mc-side">
+      <div class="mc-colors">
+        <span class="mono-label dim">GÉLATINE</span>
+        <div class="mc-swatches" id="mc-swatches" role="group" aria-label="Choix de couleur">
+          <button type="button" class="mc-swatch proximity is-active" data-color="#e2812c" aria-label="Ambre" aria-pressed="true"></button>
+          <button type="button" class="mc-swatch proximity" data-color="#c0392b" aria-label="Rouge" aria-pressed="false"></button>
+          <button type="button" class="mc-swatch proximity" data-color="#5b7ea6" aria-label="CTB, bleu froid" aria-pressed="false"></button>
+          <button type="button" class="mc-swatch proximity" data-color="#7a8f5c" aria-label="Vert scène" aria-pressed="false"></button>
+          <button type="button" class="mc-swatch proximity" data-color="#8a4f8a" aria-label="Magenta" aria-pressed="false"></button>
+        </div>
+      </div>
+
+      <div class="mc-strobe">
+        <span class="mono-label dim">STROBE</span>
+        <button type="button" class="mc-strobe-btn proximity" id="mc-strobe" aria-pressed="false">STROBE — OFF</button>
+      </div>
+    </div>
+  </div>
+
+  <p class="mc-note">Pilote en direct les indicateurs de canal (ch.01 à ch.04) sur tout le site — déplaçable, additif, jamais bloquant.</p>
+</div>
 
 <footer class="site-footer">
   <div class="footer-inner">

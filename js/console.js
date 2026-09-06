@@ -1,14 +1,16 @@
 (function () {
   "use strict";
 
+  var panel = document.querySelector(".mini-console");
+  var header = document.getElementById("mc-header");
   var fader = document.getElementById("mc-fader");
   var track = document.getElementById("mc-track");
   var cap = document.getElementById("mc-cap");
   var valueEl = document.getElementById("mc-value");
   var swatches = document.getElementById("mc-swatches");
   var strobeBtn = document.getElementById("mc-strobe");
-  var target = document.getElementById("console-target");
-  if (!fader || !track || !target) return;
+  var targets = Array.prototype.slice.call(document.querySelectorAll(".console-target"));
+  if (!fader || !track || !targets.length) return;
 
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -20,9 +22,11 @@
 
   function apply() {
     var brightness = 0.55 + (state.intensity / 100) * 0.9;
-    target.style.setProperty("--console-color", state.color);
-    target.style.setProperty("--console-brightness", brightness.toFixed(2));
-    target.classList.toggle("is-strobing", state.strobe && !reduceMotion);
+    targets.forEach(function (target) {
+      target.style.setProperty("--console-color", state.color);
+      target.style.setProperty("--console-brightness", brightness.toFixed(2));
+      target.classList.toggle("is-strobing", state.strobe && !reduceMotion);
+    });
 
     cap.style.setProperty("--mc-value", (state.intensity / 100).toFixed(3));
     valueEl.textContent = String(state.intensity).padStart(3, "0");
@@ -99,6 +103,40 @@
         apply();
       });
     }
+  }
+
+  if (panel && header) {
+    var drag = null;
+
+    function clampAndPlace(left, top) {
+      var rect = panel.getBoundingClientRect();
+      var maxLeft = Math.max(8, window.innerWidth - rect.width - 8);
+      var maxTop = Math.max(64, window.innerHeight - rect.height - 8);
+      panel.style.left = Math.min(Math.max(8, left), maxLeft) + "px";
+      panel.style.top = Math.min(Math.max(64, top), maxTop) + "px";
+      panel.style.right = "auto";
+      panel.style.bottom = "auto";
+    }
+
+    header.addEventListener("pointerdown", function (e) {
+      var rect = panel.getBoundingClientRect();
+      drag = {
+        pointerId: e.pointerId,
+        offsetX: e.clientX - rect.left,
+        offsetY: e.clientY - rect.top,
+      };
+      header.setPointerCapture(e.pointerId);
+    });
+    header.addEventListener("pointermove", function (e) {
+      if (!drag || drag.pointerId !== e.pointerId) return;
+      clampAndPlace(e.clientX - drag.offsetX, e.clientY - drag.offsetY);
+    });
+    header.addEventListener("pointerup", function () { drag = null; });
+    header.addEventListener("pointercancel", function () { drag = null; });
+
+    window.addEventListener("resize", function () {
+      if (panel.style.left) clampAndPlace(parseFloat(panel.style.left), parseFloat(panel.style.top));
+    });
   }
 
   apply();
