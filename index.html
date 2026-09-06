@@ -4,243 +4,295 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Technotropisme — Électricité, lumière &amp; effets spéciaux pour le spectacle vivant</title>
-<meta name="description" content="Technotropisme : conception et réalisation technique pour le spectacle vivant — électricité, lumière, effets spéciaux, réseau, électronique et vidéo.">
+<meta name="description" content="Technotropisme : conception et réalisation technique pour le spectacle vivant — électricité, électronique, réseau, lumière et scénographie.">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 
-<div class="light-rig" aria-hidden="true">
-  <span class="halo halo-1 halo--amber" data-speed="0.4"></span>
-  <span class="halo halo-2 halo--blue"  data-speed="0.65"></span>
-  <span class="halo halo-3 halo--amber" data-speed="0.5"></span>
-</div>
-
 <a class="skip-link" href="#main">Aller au contenu</a>
 
-<header class="site-header" id="header">
-  <div class="container header-inner">
-    <a href="#top" class="logo">
-      <svg viewBox="0 0 32 32" class="logo-mark" aria-hidden="true">
-        <path d="M17 2 L6 18 H14 L13 30 L26 12 H17 Z" fill="currentColor"/>
-      </svg>
-      <span>Technotropisme</span>
+<header class="topbar" id="topbar">
+  <div class="topbar-inner">
+    <a href="#hero" class="wordmark">
+      <span class="wordmark-name">TECHNOTROPISME</span>
+      <span class="wordmark-tag">/ CONSOLE LUMIÈRE</span>
     </a>
 
-    <nav class="main-nav" id="main-nav">
-      <a href="#services">Services</a>
-      <a href="#secteurs">Secteurs</a>
-      <a href="#realisations">Réalisations</a>
-      <a href="#apropos">À propos</a>
-      <a href="#contact" class="nav-cta">Contact</a>
+    <nav class="channel-nav" id="channel-nav">
+      <a href="#hero" class="proximity" data-nav="1">CH.01 HERO</a>
+      <a href="#projets" class="proximity" data-nav="2">CH.02 PROJETS</a>
+      <a href="#competences" class="proximity" data-nav="3">CH.03 COMPÉTENCES</a>
+      <a href="#contact" class="proximity" data-nav="4">CH.04 CONTACT</a>
     </nav>
 
-    <button class="nav-toggle" id="nav-toggle" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="main-nav">
+    <button class="nav-toggle" id="nav-toggle" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="channel-nav">
       <span></span><span></span><span></span>
     </button>
+  </div>
+  <div class="rail-mobile" aria-hidden="true">
+    <span class="rail-mobile-seg" data-fader="1"></span>
+    <span class="rail-mobile-seg" data-fader="2"></span>
+    <span class="rail-mobile-seg" data-fader="3"></span>
+    <span class="rail-mobile-seg" data-fader="4"></span>
   </div>
 </header>
 
 <main id="main">
+  <div class="stage" id="stage">
+    <div class="stage-view" id="stage-view">
 
-  <section class="hero" id="top">
-    <div class="container hero-inner">
-      <p class="eyebrow">Régie technique &amp; spectacle vivant</p>
-      <h1>Électricité, lumière et effets spéciaux, <span>au service de vos spectacles</span>.</h1>
-      <p class="hero-lead">
-        Technotropisme conçoit et met en œuvre les dispositifs techniques de vos événements :
-        électricité de puissance, éclairage scénique, effets spéciaux, réseau, électronique et vidéo.
-        Une seule interlocutrice, du plan technique à la mise en service.
-      </p>
-      <div class="hero-actions">
-        <a href="#contact" class="btn btn-primary">Discutons de votre projet</a>
-        <a href="#services" class="btn btn-ghost">Voir les prestations</a>
-      </div>
+      <!-- ch.01 — Hero -->
+      <section class="channel" id="hero" data-channel="1">
+        <div class="channel-inner hero-grid">
+
+          <div class="hero-copy">
+            <p class="channel-tag">
+              <span class="channel-dot" aria-hidden="true"></span>
+              CH.01 — HERO · INTENSITÉ <span class="intensity-value">100</span>%
+            </p>
+            <p class="eyebrow">Régie technique &amp; spectacle vivant</p>
+            <h1>Électricité, lumière et effets spéciaux, <span class="accent-live" id="console-target">au service de vos spectacles.</span></h1>
+            <p class="hero-lead">
+              Technotropisme conçoit et met en œuvre les dispositifs techniques de vos événements :
+              électricité de puissance, éclairage scénique, effets spéciaux, réseau et électronique.
+              Une seule interlocutrice, du plan technique à la mise en service.
+            </p>
+            <div class="hero-actions">
+              <a href="#contact" class="btn btn-primary">Discuter du projet →</a>
+              <a href="#projets" class="btn btn-ghost">Voir les projets</a>
+            </div>
+          </div>
+
+          <div class="mini-console" aria-label="Mini-console lumière interactive">
+            <div class="mini-console-header">
+              <span class="mono-label">MINI-CONSOLE</span>
+              <span class="mono-label dim">À MANIPULER</span>
+            </div>
+
+            <div class="mini-console-body">
+              <div class="mc-fader-group">
+                <span class="mono-label dim">INTENSITÉ</span>
+                <div class="mc-fader" id="mc-fader" role="slider" tabindex="0"
+                     aria-label="Intensité de la couleur d'accroche" aria-valuemin="0" aria-valuemax="100" aria-valuenow="70">
+                  <div class="mc-track" id="mc-track">
+                    <div class="mc-cap proximity" id="mc-cap"></div>
+                  </div>
+                </div>
+                <span class="mono-label" id="mc-value">070</span>
+              </div>
+
+              <div class="mc-side">
+                <div class="mc-colors">
+                  <span class="mono-label dim">GÉLATINE</span>
+                  <div class="mc-swatches" id="mc-swatches" role="group" aria-label="Choix de couleur">
+                    <button type="button" class="mc-swatch proximity is-active" data-color="#e2812c" aria-label="Ambre" aria-pressed="true"></button>
+                    <button type="button" class="mc-swatch proximity" data-color="#c0392b" aria-label="Rouge" aria-pressed="false"></button>
+                    <button type="button" class="mc-swatch proximity" data-color="#5b7ea6" aria-label="CTB, bleu froid" aria-pressed="false"></button>
+                    <button type="button" class="mc-swatch proximity" data-color="#7a8f5c" aria-label="Vert scène" aria-pressed="false"></button>
+                    <button type="button" class="mc-swatch proximity" data-color="#8a4f8a" aria-label="Magenta" aria-pressed="false"></button>
+                  </div>
+                </div>
+
+                <div class="mc-strobe">
+                  <span class="mono-label dim">STROBE</span>
+                  <button type="button" class="mc-strobe-btn proximity" id="mc-strobe" aria-pressed="false">STROBE — OFF</button>
+                </div>
+              </div>
+            </div>
+
+            <p class="mc-note">Pilote en direct la couleur du texte d'accroche ci-contre — additif, jamais bloquant.</p>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ch.02 — Projets -->
+      <section class="channel" id="projets" data-channel="2">
+        <div class="channel-inner">
+          <p class="channel-tag">
+            <span class="channel-dot" aria-hidden="true"></span>
+            CH.02 — PROJETS · INTENSITÉ <span class="intensity-value">100</span>%
+          </p>
+          <h2>Réalisations</h2>
+          <p class="channel-lead">Le portfolio se constitue au fil des projets : chaque réalisation vient patcher un nouvel emplacement ci-dessous.</p>
+
+          <ul class="sector-tags">
+            <li>Théâtres &amp; salles de spectacle</li>
+            <li>Compagnies &amp; événementiel</li>
+            <li>Entreprises &amp; corporate</li>
+          </ul>
+
+          <div class="project-grid">
+            <article class="project-tile proximity">
+              <span class="mono-label dim">PATCH 02.1</span>
+              <div class="project-slot"><span>Projet à venir</span></div>
+              <span class="mono-label faint">EN ATTENTE DE PATCH</span>
+            </article>
+            <article class="project-tile proximity">
+              <span class="mono-label dim">PATCH 02.2</span>
+              <div class="project-slot"><span>Projet à venir</span></div>
+              <span class="mono-label faint">EN ATTENTE DE PATCH</span>
+            </article>
+            <article class="project-tile proximity">
+              <span class="mono-label dim">PATCH 02.3</span>
+              <div class="project-slot"><span>Projet à venir</span></div>
+              <span class="mono-label faint">EN ATTENTE DE PATCH</span>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ch.03 — Compétences -->
+      <section class="channel" id="competences" data-channel="3">
+        <div class="channel-inner">
+          <p class="channel-tag">
+            <span class="channel-dot" aria-hidden="true"></span>
+            CH.03 — COMPÉTENCES · INTENSITÉ <span class="intensity-value">100</span>%
+          </p>
+          <h2>Cinq savoir-faire, une seule interlocutrice.</h2>
+          <p class="channel-lead">Mobilisables séparément ou combinés, du plan technique à la mise en service.</p>
+
+          <div class="skill-grid">
+            <article class="skill-card proximity">
+              <span class="mono-label dim">3.1</span>
+              <svg class="skill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M13 2 L4 14 H11 L10 22 L20 10 H13 Z" stroke-linejoin="round"/></svg>
+              <h3>Électricité</h3>
+              <p>Distribution de puissance, armoires électriques, alimentation de site et mise en sécurité.</p>
+            </article>
+            <article class="skill-card proximity">
+              <span class="mono-label dim">3.2</span>
+              <svg class="skill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="16" height="16" rx="2"/><circle cx="9" cy="9" r="1.2" fill="currentColor" stroke="none"/><circle cx="15" cy="15" r="1.2" fill="currentColor" stroke="none"/><path d="M9 10.4V15M15 9v4.6M9 9h6" stroke-width="1.2"/></svg>
+              <h3>Électronique</h3>
+              <p>Interfaces de déclenchement, capteurs, automatismes et intégration de systèmes de contrôle.</p>
+            </article>
+            <article class="skill-card proximity">
+              <span class="mono-label dim">3.3</span>
+              <svg class="skill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l3 3M16 16l3 3M19 5l-3 3M8 16l-3 3" stroke-linecap="round"/></svg>
+              <h3>Réseau</h3>
+              <p>Infrastructures filaires et wifi pour la billetterie, la sonorisation et la production sur site.</p>
+            </article>
+            <article class="skill-card proximity">
+              <span class="mono-label dim">3.4</span>
+              <svg class="skill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="10" r="6"/><path d="M9 21h6M10 18h4" stroke-linecap="round"/></svg>
+              <h3>Lumière</h3>
+              <p>Scénique, architecturale ou d'ambiance : la même exigence de conception, du plan à la conduite en direct.</p>
+            </article>
+            <article class="skill-card proximity">
+              <span class="mono-label dim">3.5</span>
+              <svg class="skill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l1.8 5.6L19 9l-5.2 1.4L12 16l-1.8-5.6L5 9l5.2-1.4z" stroke-linejoin="round"/></svg>
+              <h3>Scénographie</h3>
+              <p>Effets spéciaux, machinerie, captation et mapping vidéo : la mise en scène technique du spectacle.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ch.04 — Contact -->
+      <section class="channel" id="contact" data-channel="4">
+        <div class="channel-inner contact-grid">
+
+          <div class="contact-intro">
+            <p class="channel-tag">
+              <span class="channel-dot" aria-hidden="true"></span>
+              CH.04 — CONTACT · INTENSITÉ <span class="intensity-value">100</span>%
+            </p>
+            <p class="about-note">Technotropisme est une micro-entreprise technique du spectacle vivant : une seule interlocutrice, de la conception à la mise en service, en dialogue avec vos équipes artistiques et techniques.</p>
+            <h2>Parlons de votre projet</h2>
+            <p class="channel-lead">
+              Un événement à venir, une création en préparation, une question technique ?
+              Décrivez votre besoin, réponse sous quelques jours.
+            </p>
+
+            <ul class="contact-outputs">
+              <li>
+                <span class="output-dot" aria-hidden="true"></span>
+                <div>
+                  <span class="mono-label dim">OUT 01 · EMAIL</span>
+                  <a href="mailto:contact@technotropisme.fr">contact@technotropisme.fr</a>
+                </div>
+              </li>
+              <li>
+                <span class="output-dot" aria-hidden="true"></span>
+                <div>
+                  <span class="mono-label dim">OUT 02 · TÉLÉPHONE</span>
+                  <a href="tel:+33000000000">+33 (0)0 00 00 00 00</a>
+                </div>
+              </li>
+              <li>
+                <span class="output-dot" aria-hidden="true"></span>
+                <div>
+                  <span class="mono-label dim">OUT 03 · INSTAGRAM</span>
+                  <a href="https://instagram.com/technotropisme" target="_blank" rel="noopener">@technotropisme</a>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <form class="contact-form" id="contact-form" action="https://formspree.io/f/VOTRE_ID_FORMSPREE" method="POST">
+            <div class="form-row">
+              <label for="name">IN 01 — NOM</label>
+              <input type="text" id="name" name="name" required autocomplete="name">
+            </div>
+            <div class="form-row">
+              <label for="email">IN 02 — EMAIL</label>
+              <input type="email" id="email" name="email" required autocomplete="email">
+            </div>
+            <div class="form-row">
+              <label for="subject">IN 03 — TYPE DE PROJET</label>
+              <input type="text" id="subject" name="subject" placeholder="Ex : lumière pour une création théâtrale">
+            </div>
+            <div class="form-row">
+              <label for="message">IN 04 — MESSAGE</label>
+              <textarea id="message" name="message" rows="5" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary form-submit">Envoyer →</button>
+            <p class="form-note" id="form-note" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+      </section>
+
     </div>
-  </section>
-
-  <section class="section" id="services">
-    <div class="container">
-      <p class="section-eyebrow">Prestations</p>
-      <h2>Un savoir-faire technique complet</h2>
-      <p class="section-lead">Six domaines de compétence, mobilisables séparément ou combinés : puissance &amp; lumière d'un côté, signal &amp; données de l'autre.</p>
-
-      <div class="grid services-grid">
-
-        <article class="card">
-          <span class="card-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path d="M13 2 L4 14 H11 L10 22 L20 10 H13 Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
-          </span>
-          <h3>Électricité</h3>
-          <p>Distribution de puissance, armoires électriques, alimentation de site et mise en sécurité pour événements et installations temporaires ou permanentes.</p>
-        </article>
-
-        <article class="card">
-          <span class="card-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="10" r="6" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M9 21h6M10 18h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-          </span>
-          <h3>Lumière</h3>
-          <p>Scénique, architecturale, d'ambiance ou technique : la même exigence de conception, du plan à la conduite en direct.</p>
-        </article>
-
-        <article class="card">
-          <span class="card-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path d="M12 2l1.8 5.6L19 9l-5.2 1.4L12 16l-1.8-5.6L5 9l5.2-1.4z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
-          </span>
-          <h3>FX spectacle vivant</h3>
-          <p>Effets spéciaux scéniques : machinerie, pyrotechnie froide, brouillard, confettis et dispositifs sur mesure, dans le respect des normes de sécurité.</p>
-        </article>
-
-        <article class="card">
-          <span class="card-icon card-icon--signal" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2" fill="currentColor"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l3 3M16 16l3 3M19 5l-3 3M8 16l-3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-          </span>
-          <h3>Réseau</h3>
-          <p>Infrastructures réseau filaires et wifi pour la billetterie, la sonorisation numérique, la vidéo et les besoins de production sur site.</p>
-        </article>
-
-        <article class="card">
-          <span class="card-icon card-icon--signal" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="9" cy="9" r="1.4" fill="currentColor"/><circle cx="15" cy="15" r="1.4" fill="currentColor"/><path d="M9 10.4V15M15 9v4.6M9 9h6" stroke="currentColor" stroke-width="1.2"/></svg>
-          </span>
-          <h3>Électronique</h3>
-          <p>Développement de dispositifs sur mesure : interfaces de déclenchement, capteurs, automatismes et intégration de systèmes de contrôle.</p>
-        </article>
-
-        <article class="card">
-          <span class="card-icon card-icon--signal" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><rect x="2" y="6" width="14" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M16 10l6-3v10l-6-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
-          </span>
-          <h3>Vidéo</h3>
-          <p>Captation, projection et mapping vidéo intégrés à la scénographie, en coordination avec la lumière et les effets.</p>
-        </article>
-
-      </div>
-    </div>
-  </section>
-
-  <section class="section section-alt" id="secteurs">
-    <div class="container">
-      <p class="section-eyebrow">Secteurs</p>
-      <h2>Qui fait appel à Technotropisme</h2>
-
-      <div class="grid sectors-grid">
-        <div class="sector">
-          <h3>Théâtres &amp; salles de spectacle</h3>
-          <p>Accompagnement technique en régie fixe ou en renfort ponctuel, en lien avec vos équipes internes.</p>
-        </div>
-        <div class="sector">
-          <h3>Compagnies &amp; événementiel</h3>
-          <p>Conception et suivi technique de créations en tournée, festivals et événements culturels.</p>
-        </div>
-        <div class="sector">
-          <h3>Entreprises &amp; corporate</h3>
-          <p>Dispositifs techniques pour séminaires, soirées d'entreprise, lancements de produits et salons.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section" id="realisations">
-    <div class="container">
-      <p class="section-eyebrow">Réalisations</p>
-      <h2>Projets en cours de préparation</h2>
-      <p class="section-lead">Le portfolio de réalisations est en cours de constitution. Il présentera bientôt des projets détaillés avec photos, contexte et dispositifs techniques mis en œuvre.</p>
-
-      <div class="grid portfolio-grid">
-        <div class="portfolio-placeholder">
-          <span>Projet à venir</span>
-        </div>
-        <div class="portfolio-placeholder">
-          <span>Projet à venir</span>
-        </div>
-        <div class="portfolio-placeholder">
-          <span>Projet à venir</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section section-alt" id="apropos">
-    <div class="container about-inner">
-      <div class="about-text">
-        <p class="section-eyebrow">À propos</p>
-        <h2>Une approche technique et humaine du spectacle</h2>
-        <p>
-          Technotropisme est une micro-entreprise spécialisée dans la conception et la mise en œuvre
-          technique du spectacle vivant. Électricité, lumière, effets spéciaux, réseau, électronique
-          et vidéo : autant de compétences réunies pour porter vos projets de la conception à la
-          représentation, avec la même exigence de sécurité et de fiabilité.
-        </p>
-        <p>
-          Chaque projet est pensé sur mesure, en dialogue avec les équipes artistiques et
-          techniques, pour que la technique serve la mise en scène sans jamais s'imposer.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <section class="section" id="contact">
-    <div class="container contact-inner">
-      <div class="contact-intro">
-        <p class="section-eyebrow">Contact</p>
-        <h2>Parlons de votre projet</h2>
-        <p class="section-lead">
-          Un événement à venir, une création en préparation, une question technique ?
-          Décrivez votre besoin, réponse sous quelques jours.
-        </p>
-
-        <ul class="contact-details">
-          <li>
-            <span class="contact-label">Email</span>
-            <a href="mailto:contact@technotropisme.fr">contact@technotropisme.fr</a>
-          </li>
-          <li>
-            <span class="contact-label">Téléphone</span>
-            <a href="tel:+33000000000">+33 (0)0 00 00 00 00</a>
-          </li>
-          <li>
-            <span class="contact-label">Instagram</span>
-            <a href="https://instagram.com/technotropisme" target="_blank" rel="noopener">@technotropisme</a>
-          </li>
-        </ul>
-      </div>
-
-      <form class="contact-form" id="contact-form" action="https://formspree.io/f/VOTRE_ID_FORMSPREE" method="POST">
-        <div class="form-row">
-          <label for="name">Nom</label>
-          <input type="text" id="name" name="name" required autocomplete="name">
-        </div>
-        <div class="form-row">
-          <label for="email">Email</label>
-          <input type="email" id="email" name="email" required autocomplete="email">
-        </div>
-        <div class="form-row">
-          <label for="subject">Type de projet</label>
-          <input type="text" id="subject" name="subject" placeholder="Ex : lumière pour une création théâtrale">
-        </div>
-        <div class="form-row">
-          <label for="message">Message</label>
-          <textarea id="message" name="message" rows="5" required></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary form-submit">Envoyer le message</button>
-        <p class="form-note" id="form-note" role="status" aria-live="polite"></p>
-      </form>
-    </div>
-  </section>
-
+  </div>
 </main>
 
 <footer class="site-footer">
-  <div class="container footer-inner">
+  <div class="footer-inner">
     <span>© <span id="year"></span> Technotropisme — Tous droits réservés.</span>
     <span class="footer-legal">Micro-entreprise — SIRET à compléter</span>
   </div>
 </footer>
 
-<script src="js/main.js"></script>
+<!-- Fixed fader rail (desktop) -->
+<aside class="fader-rail" aria-hidden="true">
+  <div class="fader" data-fader="1">
+    <span class="mono-label rail-ch">CH.01</span>
+    <div class="fader-track"><div class="fader-cap proximity"></div></div>
+    <span class="mono-label rail-val">100</span>
+  </div>
+  <div class="fader" data-fader="2">
+    <span class="mono-label rail-ch">CH.02</span>
+    <div class="fader-track"><div class="fader-cap proximity"></div></div>
+    <span class="mono-label rail-val">000</span>
+  </div>
+  <div class="fader" data-fader="3">
+    <span class="mono-label rail-ch">CH.03</span>
+    <div class="fader-track"><div class="fader-cap proximity"></div></div>
+    <span class="mono-label rail-val">000</span>
+  </div>
+  <div class="fader" data-fader="4">
+    <span class="mono-label rail-ch">CH.04</span>
+    <div class="fader-track"><div class="fader-cap proximity"></div></div>
+    <span class="mono-label rail-val">000</span>
+  </div>
+</aside>
+
+<script src="js/main.js" defer></script>
+<script src="js/dimmer.js" defer></script>
+<script src="js/proximity.js" defer></script>
+<script src="js/console.js" defer></script>
 </body>
 </html>
