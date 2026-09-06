@@ -21,9 +21,13 @@
   // par effet — le strobe reste borné assez lent pour rester sous le seuil
   // général de flash (3/s) même à vitesse maximale.
   var FX_DURATION_RANGE = {
+    // Le strobe reste plafonné à 0.4s (~2.5 flashs/s) même à vitesse
+    // maximale, pour rester sous le seuil général de flash (3/s) —
+    // breathe et fade sont des fondus doux, sans risque équivalent,
+    // donc leur borne rapide peut monter beaucoup plus haut.
     strobe: [1.6, 0.4],
-    breathe: [6, 1.5],
-    fade: [8, 2],
+    breathe: [6, 0.5],
+    fade: [8, 0.6],
   };
 
   function currentColor() {
