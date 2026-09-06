@@ -58,21 +58,32 @@
     if (readout) readout.textContent = "100";
   }
 
-  function updateFaderUI(values) {
-    var maxIndex = 0;
-    for (var i = 1; i < values.length; i++) {
-      if (values[i] > values[maxIndex]) maxIndex = i;
-    }
+  // Le rail et la nav référencent les canaux par leur numéro
+  // (data-channel="1".."4"), pas par leur position dans la liste : des
+  // canaux "vides" sans data-channel peuvent s'intercaler entre eux
+  // (pour laisser voir les halos sans texte) sans dérégler ce mapping.
+  function updateFaderUI(byChannelNum) {
+    // Dans une frame vide, tous les vrais canaux peuvent être à ~0 en
+    // même temps (aucun n'est réellement "au premier plan") : ne
+    // marquer personne comme actif plutôt que d'en désigner un par
+    // défaut arbitrairement.
+    var maxNum = null;
+    var maxVal = 0.02;
+    Object.keys(byChannelNum).forEach(function (num) {
+      if (byChannelNum[num] > maxVal) {
+        maxVal = byChannelNum[num];
+        maxNum = num;
+      }
+    });
     faderEls.forEach(function (el) {
-      var i = parseInt(el.dataset.fader, 10) - 1;
-      var v = values[i] != null ? values[i] : 0;
+      var num = el.dataset.fader;
+      var v = byChannelNum[num] != null ? byChannelNum[num] : 0;
       el.style.setProperty("--fader-value", v.toFixed(3));
       var host = el.closest(".fader") || el;
-      host.classList.toggle("is-hot", i === maxIndex);
+      host.classList.toggle("is-hot", num === maxNum);
     });
     navLinks.forEach(function (el) {
-      var i = parseInt(el.dataset.nav, 10) - 1;
-      el.classList.toggle("is-active", i === maxIndex);
+      el.classList.toggle("is-active", el.dataset.nav === maxNum);
     });
   }
 
@@ -86,25 +97,28 @@
       : 0;
     var idx = progress * (n - 1);
 
-    var values = channels.map(function (channel, i) {
+    var byChannelNum = {};
+    channels.forEach(function (channel, i) {
       var v = intensityFor(Math.abs(idx - i));
       applyIntensity(channel, v);
-      return v;
+      if (channel.dataset.channel) byChannelNum[channel.dataset.channel] = v;
     });
-    updateFaderUI(values);
+    updateFaderUI(byChannelNum);
   }
 
   function computeFlow() {
     // Repli (mobile) : la mise en page reste normale, le rail reflète
     // simplement la part de chaque canal visible à l'écran.
     var vh = window.innerHeight;
-    var values = channels.map(function (channel) {
+    var byChannelNum = {};
+    channels.forEach(function (channel) {
       var r = channel.getBoundingClientRect();
       var visible = Math.min(r.bottom, vh) - Math.max(r.top, 0);
       var span = Math.min(r.height, vh) || 1;
-      return Math.max(0, Math.min(1, visible / span));
+      var v = Math.max(0, Math.min(1, visible / span));
+      if (channel.dataset.channel) byChannelNum[channel.dataset.channel] = v;
     });
-    updateFaderUI(values);
+    updateFaderUI(byChannelNum);
   }
 
   function onFrame() {
