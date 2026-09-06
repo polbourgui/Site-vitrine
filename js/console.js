@@ -21,10 +21,10 @@
   };
 
   function apply() {
-    var brightness = 0.55 + (state.intensity / 100) * 0.9;
+    var glow = state.intensity / 100;
     targets.forEach(function (target) {
       target.style.setProperty("--console-color", state.color);
-      target.style.setProperty("--console-brightness", brightness.toFixed(2));
+      target.style.setProperty("--console-glow-base", glow.toFixed(3));
       target.classList.toggle("is-strobing", state.strobe && !reduceMotion);
     });
 

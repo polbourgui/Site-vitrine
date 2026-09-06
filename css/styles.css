@@ -22,6 +22,12 @@
   initial-value: 0;
 }
 
+@property --console-glow {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
+
 @keyframes breathe {
   0%, 100% { --proximity: 0.08; }
   50% { --proximity: 0.26; }
@@ -212,14 +218,28 @@ button { font: inherit; }
 .hero-lead { font-size: 1.02rem; max-width: 560px; }
 .hero-actions { display: flex; gap: 14px; margin-top: 8px; flex-wrap: wrap; }
 
-/* ---------- Console-target : indicateurs pilotés par la mini-console (ch.01 à ch.04) ---------- */
-.console-target { transition: background-color 0.12s ease, color 0.12s ease, filter 0.12s ease; }
-.channel-dot.console-target { background: var(--console-color, var(--accent)); filter: brightness(var(--console-brightness, 1)); }
-.accent-live.console-target { color: var(--console-color, var(--accent)); filter: brightness(var(--console-brightness, 1)); }
-.console-target.is-strobing { animation: strobePulse 0.5s steps(2, jump-none) infinite; }
-@keyframes strobePulse {
-  0%, 100% { filter: brightness(calc(var(--console-brightness, 1) * 1.35)); }
-  50% { filter: brightness(calc(var(--console-brightness, 1) * 0.5)); }
+/* ---------- Console-target : halo de lumière piloté par la mini-console (ch.01 à ch.04) ---------- */
+/* Le texte garde sa couleur normale ; seul un halo (glow) derrière lui
+   traduit la couleur/intensité choisie — jamais de recoloration du texte
+   lui-même, pour préserver la lisibilité. */
+.console-target {
+  --console-glow: var(--console-glow-base, 0);
+  transition: text-shadow 0.15s ease, box-shadow 0.15s ease;
+}
+.accent-live.console-target {
+  color: var(--accent);
+  text-shadow:
+    0 0 calc(var(--console-glow, 0) * 22px) var(--console-color, var(--accent)),
+    0 0 calc(var(--console-glow, 0) * 56px) color-mix(in srgb, var(--console-color, var(--accent)) 65%, transparent);
+}
+.channel-dot.console-target {
+  background: var(--console-color, var(--accent));
+  box-shadow: 0 0 calc(var(--console-glow, 0) * 12px) calc(var(--console-glow, 0) * 4px) var(--console-color, var(--accent));
+}
+.console-target.is-strobing { animation: glowPulse 0.5s steps(2, jump-none) infinite; }
+@keyframes glowPulse {
+  0%, 100% { --console-glow: var(--console-glow-base, 0.7); }
+  50% { --console-glow: calc(var(--console-glow-base, 0.7) * 0.3); }
 }
 @media (prefers-reduced-motion: reduce) {
   .console-target.is-strobing { animation: none; }
