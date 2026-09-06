@@ -3,23 +3,12 @@
 
   var panel = document.querySelector(".mini-console");
   var header = document.getElementById("mc-header");
-  var targets = Array.prototype.slice.call(document.querySelectorAll(".console-target"));
-  if (!panel || !targets.length) return;
+  var haloContainers = Array.prototype.slice.call(document.querySelectorAll("[data-channel-halos]"));
+  if (!panel || !haloContainers.length) return;
 
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  var state = {
-    intensity: 70,
-    r: 226,
-    g: 129,
-    b: 44,
-    speed: 50,
-    effect: "none", // "none" | "strobe" | "breathe" | "fade"
-  };
-
-  // Durée d'un cycle complet (secondes) aux extrêmes de vitesse [lent, rapide],
-  // par effet — le strobe reste borné assez lent pour rester sous le seuil
-  // général de flash (3/s) même à vitesse maximale.
+  // ---- Durées (secondes) par effet, aux extrêmes de vitesse [lent, rapide] ----
   var FX_DURATION_RANGE = {
     // Le strobe reste plafonné à 0.4s (~2.5 flashs/s) même à vitesse
     // maximale, pour rester sous le seuil général de flash (3/s) —
@@ -29,39 +18,114 @@
     breathe: [6, 0.5],
     fade: [8, 0.6],
   };
+  // Durée (ms) d'un segment de trajet programmé, aux extrêmes de vitesse.
+  var PATH_SEGMENT_RANGE = [4000, 600];
 
-  function currentColor() {
-    return "rgb(" + state.r + ", " + state.g + ", " + state.b + ")";
+  var DEFAULT_COLORS = [
+    { r: 226, g: 129, b: 44 }, // ambre
+    { r: 91, g: 126, b: 166 }, // CTB bleu froid
+    { r: 122, g: 143, b: 92 }, // vert scène
+    { r: 138, g: 79, b: 138 }, // magenta
+    { r: 192, g: 57, b: 43 },  // rouge
+  ];
+
+  // ---- Modèle de données : une console peut piloter plusieurs halos ----
+  var nextFixtureId = 1;
+  function createFixture(overrides) {
+    var palette = DEFAULT_COLORS[(nextFixtureId - 1) % DEFAULT_COLORS.length];
+    return Object.assign(
+      {
+        id: nextFixtureId++,
+        r: palette.r,
+        g: palette.g,
+        b: palette.b,
+        intensity: 70,
+        speed: 50,
+        effect: "none", // "none" | "strobe" | "breathe" | "fade"
+        pan: 50,
+        tilt: 42,
+        path: [], // [{pan, tilt}]
+        playing: false,
+        _pathStart: null,
+      },
+      overrides || {}
+    );
   }
 
-  function fxDuration() {
-    var range = FX_DURATION_RANGE[state.effect];
+  var fixtures = [createFixture({})];
+  var activeFixtureId = fixtures[0].id;
+
+  function getActiveFixture() {
+    for (var i = 0; i < fixtures.length; i++) {
+      if (fixtures[i].id === activeFixtureId) return fixtures[i];
+    }
+    return fixtures[0];
+  }
+
+  function fxDuration(fx) {
+    var range = FX_DURATION_RANGE[fx.effect];
     if (!range) return null;
-    var t = state.speed / 100;
+    var t = fx.speed / 100;
     return (range[0] + (range[1] - range[0]) * t).toFixed(2) + "s";
   }
 
-  function apply() {
-    var glow = state.intensity / 100;
-    var color = currentColor();
-    var duration = fxDuration();
-    var effectActive = state.effect !== "none" && !reduceMotion;
+  function pathSegmentMs(fx) {
+    var t = fx.speed / 100;
+    return PATH_SEGMENT_RANGE[0] + (PATH_SEGMENT_RANGE[1] - PATH_SEGMENT_RANGE[0]) * t;
+  }
 
-    targets.forEach(function (target) {
-      target.style.setProperty("--console-color", color);
-      target.style.setProperty("--console-glow-base", glow.toFixed(3));
-      target.style.setProperty("--console-fx-duration", duration || "");
-      target.classList.toggle("is-strobing", effectActive && state.effect === "strobe");
-      target.classList.toggle("is-fx-breathe", effectActive && state.effect === "breathe");
-      target.classList.toggle("is-fx-fade", effectActive && state.effect === "fade");
+  // ---- Rendu DOM : un .channel-halo par fixture, dans chaque canal ----
+  function ensureHaloElements() {
+    haloContainers.forEach(function (container) {
+      fixtures.forEach(function (fx) {
+        if (!container.querySelector('.channel-halo[data-fixture-id="' + fx.id + '"]')) {
+          var el = document.createElement("div");
+          el.className = "channel-halo console-target";
+          el.dataset.fixtureId = String(fx.id);
+          container.appendChild(el);
+        }
+      });
+      Array.prototype.slice.call(container.querySelectorAll(".channel-halo")).forEach(function (el) {
+        var id = Number(el.dataset.fixtureId);
+        if (!fixtures.some(function (f) { return f.id === id; })) el.remove();
+      });
     });
+  }
+
+  function applyPosition(fx) {
+    var haloEls = document.querySelectorAll('.channel-halo[data-fixture-id="' + fx.id + '"]');
+    haloEls.forEach(function (el) {
+      el.style.setProperty("--halo-x", fx.pan.toFixed(1) + "%");
+      el.style.setProperty("--halo-y", fx.tilt.toFixed(1) + "%");
+    });
+  }
+
+  function applyFixture(fx) {
+    var glow = fx.intensity / 100;
+    var color = "rgb(" + fx.r + ", " + fx.g + ", " + fx.b + ")";
+    var duration = fxDuration(fx);
+    var effectActive = fx.effect !== "none" && !reduceMotion;
+
+    var haloEls = document.querySelectorAll('.channel-halo[data-fixture-id="' + fx.id + '"]');
+    var dotEls = fx.id === fixtures[0].id ? document.querySelectorAll(".channel-dot.console-target") : [];
+
+    [].concat(Array.prototype.slice.call(haloEls), Array.prototype.slice.call(dotEls)).forEach(function (el) {
+      el.style.setProperty("--console-color", color);
+      el.style.setProperty("--console-glow-base", glow.toFixed(3));
+      el.style.setProperty("--console-fx-duration", duration || "");
+      el.classList.toggle("is-strobing", effectActive && fx.effect === "strobe");
+      el.classList.toggle("is-fx-breathe", effectActive && fx.effect === "breathe");
+      el.classList.toggle("is-fx-fade", effectActive && fx.effect === "fade");
+    });
+    applyPosition(fx);
   }
 
   // ---- Fader générique : gère drag pointeur, clavier, et rendu visuel ----
   function makeFader(el, track, cap, valueEl, opts) {
     var value = opts.initial;
 
-    function render() {
+    function renderVisual(v) {
+      value = v;
       var ratio = (value - opts.min) / (opts.max - opts.min);
       cap.style.setProperty("--mc-value", ratio.toFixed(3));
       if (valueEl) valueEl.textContent = String(Math.round(value)).padStart(opts.pad || 3, "0");
@@ -69,8 +133,7 @@
     }
 
     function set(v) {
-      value = Math.min(opts.max, Math.max(opts.min, v));
-      render();
+      renderVisual(Math.min(opts.max, Math.max(opts.min, v)));
       opts.onChange(value);
     }
 
@@ -102,40 +165,249 @@
       else if (e.key === "End") { set(opts.max); e.preventDefault(); }
     });
 
-    render();
+    renderVisual(value);
+    return { renderOnly: renderVisual, get: function () { return value; } };
   }
 
-  function wireFader(prefix, min, max, initial, pad, onChange) {
+  var faders = {};
+  function wireFader(key, prefix, min, max, initial, pad, onChange) {
     var el = document.getElementById(prefix);
     var track = document.getElementById(prefix.replace("mc-fader", "mc-track"));
     var cap = document.getElementById(prefix.replace("mc-fader", "mc-cap"));
     var valueEl = document.getElementById(prefix.replace("mc-fader", "mc-value"));
     if (!el || !track || !cap) return;
-    makeFader(el, track, cap, valueEl, { min: min, max: max, initial: initial, pad: pad, onChange: onChange });
+    faders[key] = makeFader(el, track, cap, valueEl, { min: min, max: max, initial: initial, pad: pad, onChange: onChange });
   }
 
-  wireFader("mc-fader", 0, 100, state.intensity, 3, function (v) { state.intensity = v; apply(); });
-  wireFader("mc-fader-r", 0, 255, state.r, 3, function (v) { state.r = Math.round(v); apply(); });
-  wireFader("mc-fader-g", 0, 255, state.g, 3, function (v) { state.g = Math.round(v); apply(); });
-  wireFader("mc-fader-b", 0, 255, state.b, 3, function (v) { state.b = Math.round(v); apply(); });
-  wireFader("mc-fader-speed", 0, 100, state.speed, 3, function (v) { state.speed = Math.round(v); apply(); });
+  wireFader("intensity", "mc-fader", 0, 100, 70, 3, function (v) { var fx = getActiveFixture(); fx.intensity = v; applyFixture(fx); });
+  wireFader("r", "mc-fader-r", 0, 255, fixtures[0].r, 3, function (v) { var fx = getActiveFixture(); fx.r = Math.round(v); applyFixture(fx); renderFixtureTabs(); });
+  wireFader("g", "mc-fader-g", 0, 255, fixtures[0].g, 3, function (v) { var fx = getActiveFixture(); fx.g = Math.round(v); applyFixture(fx); renderFixtureTabs(); });
+  wireFader("b", "mc-fader-b", 0, 255, fixtures[0].b, 3, function (v) { var fx = getActiveFixture(); fx.b = Math.round(v); applyFixture(fx); renderFixtureTabs(); });
+  wireFader("speed", "mc-fader-speed", 0, 100, 50, 3, function (v) { var fx = getActiveFixture(); fx.speed = Math.round(v); applyFixture(fx); });
 
+  // ---- Pan/Tilt : pavé XY ----
+  var xyPad = document.getElementById("mc-xy-pad");
+  var xyPuck = document.getElementById("mc-xy-puck");
+  var xyReadout = document.getElementById("mc-xy-readout");
+
+  function renderXY(fx) {
+    if (!xyPuck) return;
+    xyPuck.style.setProperty("--pan", fx.pan.toFixed(1) + "%");
+    xyPuck.style.setProperty("--tilt", fx.tilt.toFixed(1) + "%");
+    if (xyReadout) xyReadout.textContent = String(Math.round(fx.pan)).padStart(3, "0") + " / " + String(Math.round(fx.tilt)).padStart(3, "0");
+    if (xyPad) xyPad.setAttribute("aria-valuenow", String(Math.round(fx.pan)));
+  }
+
+  function setXYFromClientPos(clientX, clientY) {
+    var rect = xyPad.getBoundingClientRect();
+    var pan = ((clientX - rect.left) / rect.width) * 100;
+    var tilt = ((clientY - rect.top) / rect.height) * 100;
+    var fx = getActiveFixture();
+    fx.pan = Math.max(0, Math.min(100, pan));
+    fx.tilt = Math.max(0, Math.min(100, tilt));
+    applyPosition(fx);
+    renderXY(fx);
+  }
+
+  if (xyPad) {
+    var xyDragging = false;
+    xyPad.addEventListener("pointerdown", function (e) {
+      xyDragging = true;
+      xyPad.setPointerCapture(e.pointerId);
+      setXYFromClientPos(e.clientX, e.clientY);
+    });
+    xyPad.addEventListener("pointermove", function (e) {
+      if (xyDragging) setXYFromClientPos(e.clientX, e.clientY);
+    });
+    xyPad.addEventListener("pointerup", function () { xyDragging = false; });
+    xyPad.addEventListener("pointercancel", function () { xyDragging = false; });
+
+    xyPad.addEventListener("keydown", function (e) {
+      var fx = getActiveFixture();
+      var step = 5;
+      if (e.key === "ArrowLeft") { fx.pan = Math.max(0, fx.pan - step); }
+      else if (e.key === "ArrowRight") { fx.pan = Math.min(100, fx.pan + step); }
+      else if (e.key === "ArrowUp") { fx.tilt = Math.max(0, fx.tilt - step); }
+      else if (e.key === "ArrowDown") { fx.tilt = Math.min(100, fx.tilt + step); }
+      else return;
+      e.preventDefault();
+      applyPosition(fx);
+      renderXY(fx);
+    });
+  }
+
+  // ---- Effets ----
   var effectButtons = Array.prototype.slice.call(document.querySelectorAll(".mc-effect-btn"));
+  function renderEffectButtons(fx) {
+    effectButtons.forEach(function (b) {
+      b.setAttribute("aria-pressed", String(b.dataset.effect === fx.effect));
+    });
+  }
   if (reduceMotion) {
     effectButtons.forEach(function (btn) { btn.setAttribute("disabled", "true"); });
   } else {
     effectButtons.forEach(function (btn) {
       btn.addEventListener("click", function () {
+        var fx = getActiveFixture();
         var chosen = btn.dataset.effect;
-        state.effect = state.effect === chosen ? "none" : chosen;
-        effectButtons.forEach(function (b) {
-          b.setAttribute("aria-pressed", String(b.dataset.effect === state.effect));
-        });
-        apply();
+        fx.effect = fx.effect === chosen ? "none" : chosen;
+        renderEffectButtons(fx);
+        applyFixture(fx);
       });
     });
   }
 
+  // ---- Mouvement programmé (trajet de points pan/tilt) ----
+  var pathAddBtn = document.getElementById("mc-path-add");
+  var pathPlayBtn = document.getElementById("mc-path-play");
+  var pathClearBtn = document.getElementById("mc-path-clear");
+  var pathCountEl = document.getElementById("mc-path-count");
+  var pathRafId = null;
+
+  function renderPathUI(fx) {
+    if (pathCountEl) pathCountEl.textContent = fx.path.length + (fx.path.length === 1 ? " POINT" : " POINTS");
+    if (pathPlayBtn) {
+      pathPlayBtn.disabled = reduceMotion || fx.path.length < 2;
+      pathPlayBtn.setAttribute("aria-pressed", String(fx.playing));
+      pathPlayBtn.textContent = fx.playing ? "STOP" : "LECTURE";
+    }
+    if (pathClearBtn) pathClearBtn.disabled = fx.path.length === 0;
+  }
+
+  function pathTick(timestamp) {
+    var anyPlaying = false;
+    fixtures.forEach(function (fx) {
+      if (!fx.playing || fx.path.length < 2) return;
+      anyPlaying = true;
+      if (fx._pathStart == null) fx._pathStart = timestamp;
+      var segMs = pathSegmentMs(fx);
+      var totalMs = segMs * fx.path.length;
+      var elapsed = (timestamp - fx._pathStart) % totalMs;
+      var segIndex = Math.floor(elapsed / segMs);
+      var segT = (elapsed % segMs) / segMs;
+      var a = fx.path[segIndex];
+      var b = fx.path[(segIndex + 1) % fx.path.length];
+      fx.pan = a.pan + (b.pan - a.pan) * segT;
+      fx.tilt = a.tilt + (b.tilt - a.tilt) * segT;
+      applyPosition(fx);
+      if (fx.id === activeFixtureId) renderXY(fx);
+    });
+    pathRafId = anyPlaying ? requestAnimationFrame(pathTick) : null;
+  }
+  function ensurePathLoop() {
+    if (pathRafId == null) pathRafId = requestAnimationFrame(pathTick);
+  }
+
+  if (pathAddBtn) {
+    pathAddBtn.addEventListener("click", function () {
+      var fx = getActiveFixture();
+      fx.path.push({ pan: fx.pan, tilt: fx.tilt });
+      renderPathUI(fx);
+    });
+  }
+  if (pathClearBtn) {
+    pathClearBtn.addEventListener("click", function () {
+      var fx = getActiveFixture();
+      fx.path = [];
+      fx.playing = false;
+      fx._pathStart = null;
+      renderPathUI(fx);
+    });
+  }
+  if (pathPlayBtn) {
+    pathPlayBtn.addEventListener("click", function () {
+      if (reduceMotion) return;
+      var fx = getActiveFixture();
+      if (fx.path.length < 2) return;
+      fx.playing = !fx.playing;
+      fx._pathStart = null;
+      renderPathUI(fx);
+      if (fx.playing) ensurePathLoop();
+    });
+  }
+
+  // ---- Fixtures : onglets, ajout, suppression ----
+  var fixturesEl = document.getElementById("mc-fixtures");
+  var fixtureAddBtn = document.getElementById("mc-fixture-add");
+
+  function renderFixtureTabs() {
+    if (!fixturesEl) return;
+    fixturesEl.innerHTML = "";
+    fixtures.forEach(function (fx, i) {
+      var tab = document.createElement("button");
+      tab.type = "button";
+      tab.className = "mc-fixture-tab" + (fx.id === activeFixtureId ? " is-active" : "");
+      tab.setAttribute("role", "tab");
+      tab.setAttribute("aria-selected", String(fx.id === activeFixtureId));
+      tab.style.setProperty("--fixture-color", "rgb(" + fx.r + ", " + fx.g + ", " + fx.b + ")");
+
+      var dot = document.createElement("span");
+      dot.className = "mc-fixture-tab-dot";
+      tab.appendChild(dot);
+
+      var label = document.createElement("span");
+      label.textContent = "H" + (i + 1);
+      tab.appendChild(label);
+
+      if (fixtures.length > 1) {
+        var remove = document.createElement("span");
+        remove.className = "mc-fixture-remove";
+        remove.textContent = "×";
+        remove.setAttribute("aria-label", "Supprimer H" + (i + 1));
+        remove.addEventListener("click", function (e) {
+          e.stopPropagation();
+          removeFixture(fx.id);
+        });
+        tab.appendChild(remove);
+      }
+
+      tab.addEventListener("click", function () { selectFixture(fx.id); });
+      fixturesEl.appendChild(tab);
+    });
+  }
+
+  function syncControlsToActiveFixture() {
+    var fx = getActiveFixture();
+    if (faders.intensity) faders.intensity.renderOnly(fx.intensity);
+    if (faders.r) faders.r.renderOnly(fx.r);
+    if (faders.g) faders.g.renderOnly(fx.g);
+    if (faders.b) faders.b.renderOnly(fx.b);
+    if (faders.speed) faders.speed.renderOnly(fx.speed);
+    renderXY(fx);
+    renderEffectButtons(fx);
+    renderPathUI(fx);
+  }
+
+  function selectFixture(id) {
+    activeFixtureId = id;
+    renderFixtureTabs();
+    syncControlsToActiveFixture();
+  }
+
+  function removeFixture(id) {
+    if (fixtures.length <= 1) return;
+    var idx = fixtures.findIndex(function (f) { return f.id === id; });
+    if (idx === -1) return;
+    fixtures.splice(idx, 1);
+    document.querySelectorAll('.channel-halo[data-fixture-id="' + id + '"]').forEach(function (el) { el.remove(); });
+    if (activeFixtureId === id) activeFixtureId = fixtures[0].id;
+    renderFixtureTabs();
+    syncControlsToActiveFixture();
+  }
+
+  function addFixture() {
+    var fx = createFixture({});
+    fixtures.push(fx);
+    activeFixtureId = fx.id;
+    ensureHaloElements();
+    applyFixture(fx);
+    renderFixtureTabs();
+    syncControlsToActiveFixture();
+  }
+
+  if (fixtureAddBtn) fixtureAddBtn.addEventListener("click", addFixture);
+
+  // ---- Déplacement du panneau ----
   if (panel && header) {
     var drag = null;
 
@@ -170,5 +442,8 @@
     });
   }
 
-  apply();
+  ensureHaloElements();
+  applyFixture(fixtures[0]);
+  renderFixtureTabs();
+  syncControlsToActiveFixture();
 })();

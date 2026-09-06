@@ -47,7 +47,7 @@
 
       <!-- ch.01 — Hero -->
       <section class="channel" id="hero" data-channel="1">
-        <div class="channel-halo console-target" aria-hidden="true"></div>
+        <div class="channel-halos" data-channel-halos aria-hidden="true"></div>
         <div class="channel-inner">
           <div class="hero-copy">
             <p class="channel-tag">
@@ -71,7 +71,7 @@
 
       <!-- ch.02 — Projets -->
       <section class="channel" id="projets" data-channel="2">
-        <div class="channel-halo console-target" aria-hidden="true"></div>
+        <div class="channel-halos" data-channel-halos aria-hidden="true"></div>
         <div class="channel-inner">
           <p class="channel-tag">
             <span class="channel-dot console-target" aria-hidden="true"></span>
@@ -108,7 +108,7 @@
 
       <!-- ch.03 — Compétences -->
       <section class="channel" id="competences" data-channel="3">
-        <div class="channel-halo console-target" aria-hidden="true"></div>
+        <div class="channel-halos" data-channel-halos aria-hidden="true"></div>
         <div class="channel-inner">
           <p class="channel-tag">
             <span class="channel-dot console-target" aria-hidden="true"></span>
@@ -154,7 +154,7 @@
 
       <!-- ch.04 — Contact -->
       <section class="channel" id="contact" data-channel="4">
-        <div class="channel-halo console-target" aria-hidden="true"></div>
+        <div class="channel-halos" data-channel-halos aria-hidden="true"></div>
         <div class="channel-inner contact-grid">
 
           <div class="contact-intro">
@@ -229,6 +229,11 @@
     <span class="mono-label dim">CH.01→04</span>
   </div>
 
+  <div class="mc-fixtures-row">
+    <div class="mc-fixtures" id="mc-fixtures" role="tablist" aria-label="Halos"></div>
+    <button type="button" class="mc-fixture-add proximity" id="mc-fixture-add" aria-label="Ajouter un halo">+</button>
+  </div>
+
   <div class="mini-console-body">
     <div class="mc-faders">
       <div class="mc-fader-group">
@@ -276,6 +281,17 @@
       </div>
     </div>
 
+    <div class="mc-xy-section">
+      <div class="mc-xy-header">
+        <span class="mono-label dim">POSITION (PAN/TILT)</span>
+        <span class="mono-label" id="mc-xy-readout">050 / 042</span>
+      </div>
+      <div class="mc-xy-pad proximity" id="mc-xy-pad" role="slider" tabindex="0"
+           aria-label="Position du halo (pan/tilt)" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+        <div class="mc-xy-puck" id="mc-xy-puck"></div>
+      </div>
+    </div>
+
     <div class="mc-speed-row">
       <span class="mono-label dim">VITESSE</span>
       <div class="mc-fader mc-fader--h" id="mc-fader-speed" role="slider" tabindex="0"
@@ -295,9 +311,21 @@
         <button type="button" class="mc-effect-btn proximity" id="mc-fx-fade" data-effect="fade" aria-pressed="false">FADE</button>
       </div>
     </div>
+
+    <div class="mc-path">
+      <div class="mc-path-header">
+        <span class="mono-label dim">MOUVEMENT PROGRAMMÉ</span>
+        <span class="mono-label" id="mc-path-count">0 POINT</span>
+      </div>
+      <div class="mc-path-buttons">
+        <button type="button" class="mc-path-btn proximity" id="mc-path-add">+ POINT</button>
+        <button type="button" class="mc-path-btn proximity" id="mc-path-play" aria-pressed="false" disabled>LECTURE</button>
+        <button type="button" class="mc-path-btn proximity" id="mc-path-clear" disabled>EFFACER</button>
+      </div>
+    </div>
   </div>
 
-  <p class="mc-note">Pilote en direct le halo ambiant de chaque canal (ch.01 à ch.04), indépendant du texte — déplaçable, additif, jamais bloquant.</p>
+  <p class="mc-note">Pilote en direct le(s) halo(s) ambiant(s) de chaque canal (ch.01 à ch.04), indépendant(s) du texte — déplaçables, additifs, jamais bloquants.</p>
 </div>
 
 <footer class="site-footer">
