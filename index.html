@@ -45,9 +45,12 @@
   <div class="stage" id="stage">
     <div class="stage-view" id="stage-view">
 
+      <!-- Halo(s) : calque global, en dehors des canaux, toujours à pleine
+           opacité — ne s'atténue jamais pendant les transitions de scroll. -->
+      <div class="channel-halos" data-channel-halos aria-hidden="true"></div>
+
       <!-- ch.01 — Hero -->
       <section class="channel" id="hero" data-channel="1">
-        <div class="channel-halos" data-channel-halos aria-hidden="true"></div>
         <div class="channel-inner">
           <div class="hero-copy">
             <p class="channel-tag">
@@ -69,9 +72,11 @@
         </div>
       </section>
 
+      <!-- Frame vide : place pour profiter du/des halo(s) sans texte -->
+      <section class="channel channel--blank" aria-hidden="true"></section>
+
       <!-- ch.02 — Projets -->
       <section class="channel" id="projets" data-channel="2">
-        <div class="channel-halos" data-channel-halos aria-hidden="true"></div>
         <div class="channel-inner">
           <p class="channel-tag">
             <span class="channel-dot console-target" aria-hidden="true"></span>
@@ -106,15 +111,17 @@
         </div>
       </section>
 
+      <!-- Frame vide : place pour profiter du/des halo(s) sans texte -->
+      <section class="channel channel--blank" aria-hidden="true"></section>
+
       <!-- ch.03 — Compétences -->
       <section class="channel" id="competences" data-channel="3">
-        <div class="channel-halos" data-channel-halos aria-hidden="true"></div>
         <div class="channel-inner">
           <p class="channel-tag">
             <span class="channel-dot console-target" aria-hidden="true"></span>
             CH.03 — COMPÉTENCES · INTENSITÉ <span class="intensity-value">100</span>%
           </p>
-          <h2>Cinq savoir-faire, une seule interlocutrice.</h2>
+          <h2>Six savoir-faire, une seule interlocutrice.</h2>
           <p class="channel-lead">Mobilisables séparément ou combinés, du plan technique à la mise en service.</p>
 
           <div class="skill-grid">
@@ -146,15 +153,23 @@
               <span class="mono-label dim">3.5</span>
               <svg class="skill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l1.8 5.6L19 9l-5.2 1.4L12 16l-1.8-5.6L5 9l5.2-1.4z" stroke-linejoin="round"/></svg>
               <h3>Scénographie</h3>
-              <p>Effets spéciaux, machinerie, captation et mapping vidéo : la mise en scène technique du spectacle.</p>
+              <p>Effets spéciaux, machinerie et dispositifs scéniques sur mesure, du concept à la mise en piste.</p>
+            </article>
+            <article class="skill-card proximity">
+              <span class="mono-label dim">3.6</span>
+              <svg class="skill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="M16 10l6-3v10l-6-3" stroke-linejoin="round"/></svg>
+              <h3>Vidéo &amp; mapping</h3>
+              <p>Captation, projection et mapping vidéo, en coordination avec la lumière et la scénographie.</p>
             </article>
           </div>
         </div>
       </section>
 
+      <!-- Frame vide : place pour profiter du/des halo(s) sans texte -->
+      <section class="channel channel--blank" aria-hidden="true"></section>
+
       <!-- ch.04 — Contact -->
       <section class="channel" id="contact" data-channel="4">
-        <div class="channel-halos" data-channel-halos aria-hidden="true"></div>
         <div class="channel-inner contact-grid">
 
           <div class="contact-intro">
@@ -325,7 +340,7 @@
     </div>
   </div>
 
-  <p class="mc-note">Pilote en direct le(s) halo(s) ambiant(s) de chaque canal (ch.01 à ch.04), indépendant(s) du texte — déplaçables, additifs, jamais bloquants.</p>
+  <p class="mc-note">Pilote en direct le(s) halo(s) ambiant(s), toujours visibles pendant le défilement — indépendant(s) du texte, déplaçables, additifs, jamais bloquants.</p>
 </div>
 
 <footer class="site-footer">

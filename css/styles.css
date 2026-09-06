@@ -169,17 +169,16 @@ button { font: inherit; }
   filter: none;
 }
 
-/* Halo(s) ambiant(s) pilotés par la mini-console, présents sur chaque
-   canal — décorrélés du texte : un fond de lumière derrière tout le
-   contenu de la section, jamais ancré à un mot ou un élément précis.
-   Un canal peut porter plusieurs halos (un par fixture créée dans la
-   console), chacun positionnable indépendamment (--halo-x/--halo-y,
-   pan/tilt) et empilés dans .channel-halos. L'intensité de chacun est
-   le produit de l'intensité de la console (glow) et de celle du canal
-   (--intensity, celle du dimmer de scroll) : ils s'atténuent donc
-   automatiquement pendant les transitions de scroll. */
+/* Halo(s) ambiant(s) pilotés par la mini-console — décorrélés du texte
+   ET du dimmer de scroll : un calque global, fixe, en dehors de tout
+   .channel, qui reste à pleine opacité pendant tout le défilement (y
+   compris pendant les transitions entre canaux). Chaque halo (une
+   fixture créée dans la console) est positionnable indépendamment
+   (--halo-x/--halo-y, pan/tilt) et empilé dans .channel-halos. Des
+   canaux "vides" (.channel--blank) laissent voir ces halos sans aucun
+   texte par-dessus. */
 .channel-halos {
-  position: absolute;
+  position: fixed;
   inset: 0;
   z-index: 0;
   pointer-events: none;
@@ -189,7 +188,7 @@ button { font: inherit; }
   inset: 0;
   background: radial-gradient(
     circle at var(--halo-x, 50%) var(--halo-y, 42%),
-    color-mix(in srgb, var(--console-color, var(--accent)) calc(var(--console-glow, 0) * var(--intensity, 1) * 100%), transparent) 0%,
+    color-mix(in srgb, var(--console-color, var(--accent)) calc(var(--console-glow, 0) * 100%), transparent) 0%,
     transparent 62%
   );
 }
@@ -537,7 +536,7 @@ button { font: inherit; }
 /* ---------- Compétences ---------- */
 .skill-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 16px;
   margin-top: 40px;
 }
