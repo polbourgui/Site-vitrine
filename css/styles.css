@@ -249,13 +249,27 @@ button { font: inherit; }
   --console-glow: var(--console-glow-base, 0);
   transition: box-shadow 0.15s ease;
 }
+/* Pendant un effet, la transition ci-dessus lisserait/retarderait les
+   changements pourtant déjà animés par les keyframes (perceptible
+   surtout sur le créneau net du strobe) — on la désactive. */
+.console-target.is-strobing,
+.console-target.is-fx-breathe,
+.console-target.is-fx-fade {
+  transition: none;
+}
 .channel-dot.console-target {
   background: var(--console-color, var(--accent));
   box-shadow: 0 0 calc(var(--console-glow, 0) * 12px) calc(var(--console-glow, 0) * 4px) var(--console-color, var(--accent));
 }
+/* Trois formes de courbe structurellement différentes — pas seulement
+   une même bosse rejouée avec des réglages différents — pour que les
+   3 effets se distinguent vraiment à l'œil :
+   - STROBE : créneau net, on/off, ~50/50.
+   - BREATHE : une seule onde continue, douce (ease-in-out).
+   - FADE : monte, tient, descend, tient (paliers), en rampe linéaire. */
 .console-target.is-strobing {
   animation-name: glowPulse;
-  animation-timing-function: steps(2, jump-none);
+  animation-timing-function: linear;
   animation-iteration-count: infinite;
   animation-duration: var(--console-fx-duration, 0.5s);
 }
@@ -272,16 +286,18 @@ button { font: inherit; }
   animation-duration: var(--console-fx-duration, 4s);
 }
 @keyframes glowPulse {
-  0%, 100% { --console-glow: var(--console-glow-base, 0.7); }
-  50% { --console-glow: calc(var(--console-glow-base, 0.7) * 0.3); }
+  0%, 45% { --console-glow: var(--console-glow-base, 0.7); }
+  50%, 95% { --console-glow: calc(var(--console-glow-base, 0.7) * 0.15); }
+  100% { --console-glow: var(--console-glow-base, 0.7); }
 }
 @keyframes glowBreathe {
   0%, 100% { --console-glow: calc(var(--console-glow-base, 0.7) * 0.35); }
   50% { --console-glow: var(--console-glow-base, 0.7); }
 }
 @keyframes glowFade {
-  0%, 100% { --console-glow: calc(var(--console-glow-base, 0.7) * 0.08); }
-  50% { --console-glow: var(--console-glow-base, 0.7); }
+  0%, 10% { --console-glow: var(--console-glow-base, 0.7); }
+  40%, 60% { --console-glow: calc(var(--console-glow-base, 0.7) * 0.04); }
+  90%, 100% { --console-glow: var(--console-glow-base, 0.7); }
 }
 @media (prefers-reduced-motion: reduce) {
   .console-target.is-strobing,
