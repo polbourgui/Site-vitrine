@@ -230,32 +230,69 @@
   </div>
 
   <div class="mini-console-body">
-    <div class="mc-fader-group">
-      <span class="mono-label dim">INTENSITÉ</span>
-      <div class="mc-fader" id="mc-fader" role="slider" tabindex="0"
-           aria-label="Intensité des indicateurs de canal" aria-valuemin="0" aria-valuemax="100" aria-valuenow="70">
-        <div class="mc-track" id="mc-track">
-          <div class="mc-cap proximity" id="mc-cap"></div>
+    <div class="mc-faders">
+      <div class="mc-fader-group">
+        <span class="mono-label dim">INT</span>
+        <div class="mc-fader" id="mc-fader" role="slider" tabindex="0"
+             aria-label="Intensité du halo" aria-valuemin="0" aria-valuemax="100" aria-valuenow="70">
+          <div class="mc-track" id="mc-track">
+            <div class="mc-cap proximity" id="mc-cap"></div>
+          </div>
         </div>
+        <span class="mono-label" id="mc-value">070</span>
       </div>
-      <span class="mono-label" id="mc-value">070</span>
+
+      <div class="mc-fader-group">
+        <span class="mono-label dim mc-r">R</span>
+        <div class="mc-fader" id="mc-fader-r" role="slider" tabindex="0"
+             aria-label="Rouge" aria-valuemin="0" aria-valuemax="255" aria-valuenow="226">
+          <div class="mc-track" id="mc-track-r">
+            <div class="mc-cap proximity mc-cap--r" id="mc-cap-r"></div>
+          </div>
+        </div>
+        <span class="mono-label" id="mc-value-r">226</span>
+      </div>
+
+      <div class="mc-fader-group">
+        <span class="mono-label dim mc-g">G</span>
+        <div class="mc-fader" id="mc-fader-g" role="slider" tabindex="0"
+             aria-label="Vert" aria-valuemin="0" aria-valuemax="255" aria-valuenow="129">
+          <div class="mc-track" id="mc-track-g">
+            <div class="mc-cap proximity mc-cap--g" id="mc-cap-g"></div>
+          </div>
+        </div>
+        <span class="mono-label" id="mc-value-g">129</span>
+      </div>
+
+      <div class="mc-fader-group">
+        <span class="mono-label dim mc-b">B</span>
+        <div class="mc-fader" id="mc-fader-b" role="slider" tabindex="0"
+             aria-label="Bleu" aria-valuemin="0" aria-valuemax="255" aria-valuenow="44">
+          <div class="mc-track" id="mc-track-b">
+            <div class="mc-cap proximity mc-cap--b" id="mc-cap-b"></div>
+          </div>
+        </div>
+        <span class="mono-label" id="mc-value-b">044</span>
+      </div>
     </div>
 
-    <div class="mc-side">
-      <div class="mc-colors">
-        <span class="mono-label dim">GÉLATINE</span>
-        <div class="mc-swatches" id="mc-swatches" role="group" aria-label="Choix de couleur">
-          <button type="button" class="mc-swatch proximity is-active" data-color="#e2812c" aria-label="Ambre" aria-pressed="true"></button>
-          <button type="button" class="mc-swatch proximity" data-color="#c0392b" aria-label="Rouge" aria-pressed="false"></button>
-          <button type="button" class="mc-swatch proximity" data-color="#5b7ea6" aria-label="CTB, bleu froid" aria-pressed="false"></button>
-          <button type="button" class="mc-swatch proximity" data-color="#7a8f5c" aria-label="Vert scène" aria-pressed="false"></button>
-          <button type="button" class="mc-swatch proximity" data-color="#8a4f8a" aria-label="Magenta" aria-pressed="false"></button>
+    <div class="mc-speed-row">
+      <span class="mono-label dim">VITESSE</span>
+      <div class="mc-fader mc-fader--h" id="mc-fader-speed" role="slider" tabindex="0"
+           aria-label="Vitesse des effets" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+        <div class="mc-track mc-track--h" id="mc-track-speed">
+          <div class="mc-cap proximity mc-cap--h" id="mc-cap-speed"></div>
         </div>
       </div>
+      <span class="mono-label" id="mc-value-speed">050</span>
+    </div>
 
-      <div class="mc-strobe">
-        <span class="mono-label dim">STROBE</span>
-        <button type="button" class="mc-strobe-btn proximity" id="mc-strobe" aria-pressed="false">STROBE — OFF</button>
+    <div class="mc-effects">
+      <span class="mono-label dim">EFFET</span>
+      <div class="mc-effect-buttons" role="group" aria-label="Effet d'intensité">
+        <button type="button" class="mc-effect-btn proximity" id="mc-fx-strobe" data-effect="strobe" aria-pressed="false">STROBE</button>
+        <button type="button" class="mc-effect-btn proximity" id="mc-fx-breathe" data-effect="breathe" aria-pressed="false">BREATHE</button>
+        <button type="button" class="mc-effect-btn proximity" id="mc-fx-fade" data-effect="fade" aria-pressed="false">FADE</button>
       </div>
     </div>
   </div>
