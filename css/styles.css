@@ -160,12 +160,31 @@ button { font: inherit; }
 }
 
 .channel {
+  position: relative;
   min-height: calc(100vh - 56px);
   display: flex;
   align-items: center;
   padding: 88px 0;
   opacity: 1;
   filter: none;
+}
+
+/* Halo ambiant piloté par la mini-console, présent sur chaque canal —
+   décorrélé du texte : un fond de lumière derrière tout le contenu de
+   la section, jamais ancré à un mot ou un élément précis. Son
+   intensité est le produit de l'intensité de la console (glow) et de
+   celle du canal (--intensity, celle du dimmer de scroll) : il
+   s'atténue donc automatiquement pendant les transitions de scroll. */
+.channel-halo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at 50% 42%,
+    color-mix(in srgb, var(--console-color, var(--accent)) calc(var(--console-glow, 0) * var(--intensity, 1) * 100%), transparent) 0%,
+    transparent 62%
+  );
 }
 .stage.is-dimmer .channel {
   position: absolute;
@@ -179,6 +198,8 @@ button { font: inherit; }
 }
 
 .channel-inner {
+  position: relative;
+  z-index: 1;
   max-width: var(--max-width);
   margin: 0 auto;
   padding: 0 24px;
@@ -218,30 +239,15 @@ button { font: inherit; }
 .hero-lead { font-size: 1.02rem; max-width: 560px; }
 .hero-actions { display: flex; gap: 14px; margin-top: 8px; flex-wrap: wrap; }
 
-/* ---------- Console-target : halo de lumière piloté par la mini-console (ch.01 à ch.04) ---------- */
-/* Le texte garde sa couleur normale ; seul un halo (glow) derrière lui
-   traduit la couleur/intensité choisie — jamais de recoloration du texte
-   lui-même, pour préserver la lisibilité. */
+.accent-live { color: var(--accent); }
+
+/* ---------- Console-target : éléments pilotés par la mini-console (ch.01 à ch.04) ---------- */
+/* Décorrélé du texte : ce sont le halo ambiant de chaque canal
+   (.channel-halo) et le point indicateur (.channel-dot) qui réagissent
+   à la console — jamais le texte lui-même. */
 .console-target {
   --console-glow: var(--console-glow-base, 0);
   transition: box-shadow 0.15s ease;
-}
-.accent-live.console-target {
-  color: var(--accent);
-  padding: 0.4em 1em;
-  margin: 0 -1em;
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
-  /* Pas de background-size explicite : le dégradé remplit exactement sa
-     propre boîte (padding-box), donc son fondu ne peut jamais être
-     tronqué net à un bord visible — seule sa propre forme radiale crée
-     le fondu, en douceur, jusqu'à transparence complète avant le bord. */
-  background-image: radial-gradient(
-    ellipse at center,
-    color-mix(in srgb, var(--console-color, var(--accent)) calc(var(--console-glow, 0) * 100%), transparent) 0%,
-    transparent 68%
-  );
-  background-repeat: no-repeat;
 }
 .channel-dot.console-target {
   background: var(--console-color, var(--accent));
