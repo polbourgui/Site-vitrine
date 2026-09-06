@@ -224,13 +224,22 @@ button { font: inherit; }
    lui-même, pour préserver la lisibilité. */
 .console-target {
   --console-glow: var(--console-glow-base, 0);
-  transition: text-shadow 0.15s ease, box-shadow 0.15s ease;
+  transition: box-shadow 0.15s ease;
 }
 .accent-live.console-target {
   color: var(--accent);
-  text-shadow:
-    0 0 calc(var(--console-glow, 0) * 22px) var(--console-color, var(--accent)),
-    0 0 calc(var(--console-glow, 0) * 56px) color-mix(in srgb, var(--console-color, var(--accent)) 65%, transparent);
+  padding: 0.15em 0.4em;
+  margin: 0 -0.4em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  background-image: radial-gradient(
+    ellipse 65% 75% at center,
+    color-mix(in srgb, var(--console-color, var(--accent)) calc(var(--console-glow, 0) * 100%), transparent) 0%,
+    transparent 72%
+  );
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 9.5em 4.6em;
 }
 .channel-dot.console-target {
   background: var(--console-color, var(--accent));
