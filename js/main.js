@@ -7,72 +7,18 @@
 
   // Mobile nav toggle
   var navToggle = document.getElementById("nav-toggle");
-  var mainNav = document.getElementById("main-nav");
-  if (navToggle && mainNav) {
+  var channelNav = document.getElementById("channel-nav");
+  if (navToggle && channelNav) {
     navToggle.addEventListener("click", function () {
-      var isOpen = mainNav.classList.toggle("is-open");
+      var isOpen = channelNav.classList.toggle("is-open");
       navToggle.setAttribute("aria-expanded", String(isOpen));
     });
-    mainNav.querySelectorAll("a").forEach(function (link) {
+    channelNav.querySelectorAll("a").forEach(function (link) {
       link.addEventListener("click", function () {
-        mainNav.classList.remove("is-open");
+        channelNav.classList.remove("is-open");
         navToggle.setAttribute("aria-expanded", "false");
       });
     });
-  }
-
-  // Parallax light halos
-  var halos = document.querySelectorAll(".light-rig .halo");
-  if (halos.length && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    var travel = window.innerHeight * 1.6;
-    window.addEventListener("resize", function () {
-      travel = window.innerHeight * 1.6;
-    });
-
-    var ticking = false;
-    var updateHalos = function () {
-      var y = window.scrollY || window.pageYOffset;
-      halos.forEach(function (halo) {
-        var speed = parseFloat(halo.dataset.speed) || 0.2;
-        var offset = travel ? (y * speed) % travel : y * speed;
-        halo.style.transform = "translate3d(0, " + (-offset).toFixed(1) + "px, 0)";
-      });
-      ticking = false;
-    };
-    window.addEventListener(
-      "scroll",
-      function () {
-        if (!ticking) {
-          window.requestAnimationFrame(updateHalos);
-          ticking = true;
-        }
-      },
-      { passive: true }
-    );
-    updateHalos();
-  }
-
-  // Reveal on scroll
-  var revealTargets = document.querySelectorAll(
-    ".card, .sector, .portfolio-placeholder, .about-text, .contact-inner > *"
-  );
-  revealTargets.forEach(function (el) { el.classList.add("reveal"); });
-
-  if ("IntersectionObserver" in window) {
-    var observer = new IntersectionObserver(
-      function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.12 }
-    );
-    revealTargets.forEach(function (el) { observer.observe(el); });
-  } else {
-    revealTargets.forEach(function (el) { el.classList.add("is-visible"); });
   }
 
   // Contact form submission (Formspree-compatible AJAX)
