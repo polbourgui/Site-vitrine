@@ -17,15 +17,15 @@
 }
 
 /* Grain : texture de bruit générée en SVG (feTurbulence), pas une image
-   à charger — un calque fixe, discret, au-dessus de tout le site
-   (console et rail compris), pour une finition légèrement analogique
-   plutôt qu'un aplat numérique trop propre. Motif statique par défaut
-   (et sous prefers-reduced-motion) ; js/main.js le remplace par une
-   variante à seed animé (SMIL) quand le mouvement est autorisé. */
+   à charger — limité à l'arrière-plan (même palier que .channel-halos,
+   sous le contenu des canaux et sous la nav/le rail/la console), pour
+   texturer les halos sans grainer le texte ni l'UI. Motif statique par
+   défaut (et sous prefers-reduced-motion) ; js/main.js le remplace par
+   une variante à seed animé (SMIL) quand le mouvement est autorisé. */
 .grain-overlay {
   position: fixed;
   inset: 0;
-  z-index: 500;
+  z-index: 1;
   pointer-events: none;
   opacity: 0.1;
   /* Bruit blanc (alpha module par la turbulence) + screen : sur un
