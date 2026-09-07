@@ -44,7 +44,7 @@
         effect: "none", // "none" | "strobe" | "breathe" | "fade"
         pan: 50,
         tilt: 42,
-        path: [], // [{pan, tilt}]
+        path: [], // [{pan, tilt, r, g, b}]
         playing: false,
         _pathStart: null,
       },
@@ -263,7 +263,7 @@
     });
   }
 
-  // ---- Mouvement programmé (trajet de points pan/tilt) ----
+  // ---- Mouvement programmé (trajet de points pan/tilt + couleur RGB) ----
   var pathAddBtn = document.getElementById("mc-path-add");
   var pathPlayBtn = document.getElementById("mc-path-play");
   var pathClearBtn = document.getElementById("mc-path-clear");
@@ -280,6 +280,8 @@
     if (pathClearBtn) pathClearBtn.disabled = fx.path.length === 0;
   }
 
+  function lerp(a, b, t) { return a + (b - a) * t; }
+
   function pathTick(timestamp) {
     var anyPlaying = false;
     fixtures.forEach(function (fx) {
@@ -293,10 +295,19 @@
       var segT = (elapsed % segMs) / segMs;
       var a = fx.path[segIndex];
       var b = fx.path[(segIndex + 1) % fx.path.length];
-      fx.pan = a.pan + (b.pan - a.pan) * segT;
-      fx.tilt = a.tilt + (b.tilt - a.tilt) * segT;
-      applyPosition(fx);
-      if (fx.id === activeFixtureId) renderXY(fx);
+      fx.pan = lerp(a.pan, b.pan, segT);
+      fx.tilt = lerp(a.tilt, b.tilt, segT);
+      fx.r = Math.round(lerp(a.r, b.r, segT));
+      fx.g = Math.round(lerp(a.g, b.g, segT));
+      fx.b = Math.round(lerp(a.b, b.b, segT));
+      applyFixture(fx);
+      if (fx.id === activeFixtureId) {
+        renderXY(fx);
+        if (faders.r) faders.r.renderOnly(fx.r);
+        if (faders.g) faders.g.renderOnly(fx.g);
+        if (faders.b) faders.b.renderOnly(fx.b);
+        updateActiveTabColor(fx);
+      }
     });
     pathRafId = anyPlaying ? requestAnimationFrame(pathTick) : null;
   }
@@ -307,7 +318,7 @@
   if (pathAddBtn) {
     pathAddBtn.addEventListener("click", function () {
       var fx = getActiveFixture();
-      fx.path.push({ pan: fx.pan, tilt: fx.tilt });
+      fx.path.push({ pan: fx.pan, tilt: fx.tilt, r: fx.r, g: fx.g, b: fx.b });
       renderPathUI(fx);
     });
   }
