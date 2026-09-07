@@ -413,6 +413,18 @@
 
   if (fixtureAddBtn) fixtureAddBtn.addEventListener("click", addFixture);
 
+  // ---- Réduire / agrandir le panneau ----
+  var minimizeBtn = document.getElementById("mc-minimize");
+  if (minimizeBtn && panel) {
+    minimizeBtn.addEventListener("pointerdown", function (e) { e.stopPropagation(); });
+    minimizeBtn.addEventListener("click", function () {
+      var collapsed = panel.classList.toggle("is-collapsed");
+      minimizeBtn.textContent = collapsed ? "+" : "−";
+      minimizeBtn.setAttribute("aria-label", collapsed ? "Agrandir la console" : "Réduire la console");
+      minimizeBtn.setAttribute("aria-expanded", String(!collapsed));
+    });
+  }
+
   // ---- Déplacement du panneau ----
   if (panel && header) {
     var drag = null;
