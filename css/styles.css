@@ -19,13 +19,15 @@
 /* Grain : texture de bruit générée en SVG (feTurbulence), pas une image
    à charger — un calque fixe, discret, au-dessus de tout le site
    (console et rail compris), pour une finition légèrement analogique
-   plutôt qu'un aplat numérique trop propre. */
+   plutôt qu'un aplat numérique trop propre. Motif statique par défaut
+   (et sous prefers-reduced-motion) ; js/main.js le remplace par une
+   variante à seed animé (SMIL) quand le mouvement est autorisé. */
 .grain-overlay {
   position: fixed;
   inset: 0;
   z-index: 500;
   pointer-events: none;
-  opacity: 0.05;
+  opacity: 0.1;
   /* Bruit blanc (alpha module par la turbulence) + screen : sur un
      thème quasi noir, "overlay"/"multiply" avec du bruit sombre est
      imperceptible (assombrir du noir ne change presque rien) — il
