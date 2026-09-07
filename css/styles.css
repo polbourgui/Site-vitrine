@@ -16,6 +16,26 @@
   --font-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
 }
 
+/* Grain : texture de bruit générée en SVG (feTurbulence), pas une image
+   à charger — un calque fixe, discret, au-dessus de tout le site
+   (console et rail compris), pour une finition légèrement analogique
+   plutôt qu'un aplat numérique trop propre. */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  pointer-events: none;
+  opacity: 0.05;
+  /* Bruit blanc (alpha module par la turbulence) + screen : sur un
+     thème quasi noir, "overlay"/"multiply" avec du bruit sombre est
+     imperceptible (assombrir du noir ne change presque rien) — il
+     faut au contraire de fins éclats clairs, comme un vrai grain de
+     pellicule dans les basses lumières. */
+  mix-blend-mode: screen;
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxODAiIGhlaWdodD0iMTgwIj4gIDxmaWx0ZXIgaWQ9Im4iPiAgICA8ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iMC44NSIgbnVtT2N0YXZlcz0iMiIgc3RpdGNoVGlsZXM9InN0aXRjaCIgcmVzdWx0PSJ0Ii8+ICAgIDxmZUNvbG9yTWF0cml4IGluPSJ0IiB0eXBlPSJtYXRyaXgiIHZhbHVlcz0iMCAwIDAgMCAxICAwIDAgMCAwIDEgIDAgMCAwIDAgMSAgMCAwIDAgMC45IDAiLz4gIDwvZmlsdGVyPiAgPHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsdGVyPSJ1cmwoI24pIi8+PC9zdmc+");
+  background-repeat: repeat;
+}
+
 @property --proximity {
   syntax: '<number>';
   inherits: false;
