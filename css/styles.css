@@ -509,7 +509,14 @@ button { font: inherit; }
 .mc-track--h { width: 100%; height: 4px; }
 .mc-cap--h {
   left: calc(var(--mc-value, 0.5) * (100% - 9px));
-  bottom: 50%;
+  /* Centrage vertical sur la piste : `top: 50%` place le bord haut du
+     curseur au centre du rail, puis translateY(-50%) le remonte de sa
+     propre demi-hauteur pour centrer son centre sur ce point. Utiliser
+     `bottom: 50%` ici doublerait le décalage au lieu de centrer.
+     `bottom: auto` neutralise aussi le positionnement vertical de
+     .mc-cap (les deux classes cohabitent sur le curseur de vitesse). */
+  top: 50%;
+  bottom: auto;
   width: 9px;
   height: 22px;
   transform: translateY(-50%) scale(calc(1 + var(--proximity, 0) * 0.2));
@@ -791,7 +798,8 @@ button { font: inherit; }
   .mc-cap,
   .mc-cap--h {
     left: calc(var(--mc-value, 0.7) * (100% - 16px));
-    bottom: 50%;
+    top: 50%;
+    bottom: auto;
     width: 16px;
     height: 34px;
     transform: translateY(-50%) scale(calc(1 + var(--proximity, 0) * 0.2));
