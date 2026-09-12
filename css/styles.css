@@ -333,7 +333,11 @@ button { font: inherit; }
   right: 116px;
   bottom: 28px;
   width: 340px;
-  max-height: calc(100vh - 56px);
+  /* La hauteur max doit aussi retrancher les 28px de `bottom` : sans ça,
+     un contenu assez long (plusieurs halos) fait dépasser le panneau
+     au-dessus de la barre de nav (z-index 300 > 200) et intercepte ses
+     clics — cf. le lien de nav resté inerte au clic. */
+  max-height: calc(100vh - 56px - 28px);
   overflow-y: auto;
   background: var(--bg-panel);
   border: 1px solid var(--line-strong);
