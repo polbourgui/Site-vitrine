@@ -52,7 +52,16 @@
     );
   }
 
-  var fixtures = [createFixture({})];
+  // Réglages de démarrage : deux halos déjà en mouvement (teintes et
+  // rythmes distincts, cf. proposition en commentaire) plutôt qu'un
+  // halo unique figé sur "effect: none" — la page est donc déjà
+  // vivante à l'arrivée, sans qu'aucun visiteur n'ait touché à la
+  // console. Rien n'est ajouté au trajet programmé (path) : ce champ
+  // reste vide pour que "+ POINT" demeure une découverte.
+  var fixtures = [
+    createFixture({ intensity: 55, speed: 30, effect: "breathe", pan: 62, tilt: 38 }), // H1 ambre, respiration lente (~4,3s)
+    createFixture({ intensity: 30, speed: 18, effect: "fade", pan: 25, tilt: 58 }),     // H2 CTB froid, fondu plus lent (~6,7s), déphasé du premier
+  ];
   var activeFixtureId = fixtures[0].id;
 
   function getActiveFixture() {
@@ -443,11 +452,21 @@
 
   if (panel && mobileMQ.matches) setCollapsed(true);
 
+  // Sur mobile, la console et le menu (js/main.js) sont deux panneaux
+  // fixed superposés : en ouvrir un referme l'autre, pour ne jamais les
+  // empiler l'un sur l'autre (cf. "console:open"/"nav:open").
+  function toggleConsole() {
+    var willOpen = panel.classList.contains("is-collapsed");
+    setCollapsed(!willOpen);
+    if (willOpen) document.dispatchEvent(new CustomEvent("console:open"));
+  }
+  document.addEventListener("nav:open", function () {
+    if (mobileMQ.matches) setCollapsed(true);
+  });
+
   if (minimizeBtn && panel) {
     minimizeBtn.addEventListener("pointerdown", function (e) { e.stopPropagation(); });
-    minimizeBtn.addEventListener("click", function () {
-      setCollapsed(!panel.classList.contains("is-collapsed"));
-    });
+    minimizeBtn.addEventListener("click", toggleConsole);
   }
 
   // ---- Déplacement du panneau (souris/trackpad uniquement) ----
@@ -486,7 +505,7 @@
     header.addEventListener("click", function (e) {
       if (!mobileMQ.matches) return;
       if (minimizeBtn && (e.target === minimizeBtn || minimizeBtn.contains(e.target))) return;
-      setCollapsed(!panel.classList.contains("is-collapsed"));
+      toggleConsole();
     });
 
     window.addEventListener("resize", function () {
@@ -497,7 +516,11 @@
   }
 
   ensureHaloElements();
-  applyFixture(fixtures[0]);
+  // Chaque halo est indépendant : on applique bien tous les fixtures de
+  // démarrage (pas seulement fixtures[0], la seule "sélectionnée" dans
+  // la console), sinon H2 resterait invisible tant qu'on ne le
+  // sélectionne pas manuellement une première fois.
+  fixtures.forEach(applyFixture);
   renderFixtureTabs();
   syncControlsToActiveFixture();
 })();
