@@ -81,6 +81,11 @@
       el.style.setProperty("--fader-value", v.toFixed(3));
       var host = el.closest(".fader") || el;
       host.classList.toggle("is-hot", num === maxNum);
+      // Le curseur visuel (--fader-value) bougeait déjà ; la valeur
+      // numérique affichée à côté (statique dans le HTML : 100/000/…)
+      // ne suivait pas. On la recalcule ici à chaque mise à jour.
+      var valEl = host.querySelector(".rail-val");
+      if (valEl) valEl.textContent = String(Math.round(v * 100)).padStart(3, "0");
     });
     navLinks.forEach(function (el) {
       el.classList.toggle("is-active", el.dataset.nav === maxNum);
