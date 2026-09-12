@@ -147,5 +147,35 @@
   window.addEventListener("resize", applyMode);
   if (desktopMQ.addEventListener) desktopMQ.addEventListener("change", applyMode);
 
+  // ---- Liens d'ancre (nav, CTA du hero, logo) vers un canal ----
+  // En mode "pinned" (desktop), chaque .channel est en position absolute
+  // /inset:0 dans le conteneur sticky : tous occupent donc exactement le
+  // même rectangle à l'écran, quel que soit le canal réellement au
+  // premier plan. Le saut d'ancre natif du navigateur, qui juge
+  // l'élément cible déjà "à l'écran", ne scrolle alors presque pas (ou
+  // pas du tout) — il faut recalculer nous-mêmes la position de scroll
+  // qui affiche ce canal (inverse de la formule de computePinned : idx
+  // = progress * (n - 1), donc scrollY = stageTop + idx/(n-1) * scrollable).
+  // En layout normal (mobile, ou prefers-reduced-motion — qui coupe ce
+  // script entier plus haut), chaque canal a une vraie position dans le
+  // document : le saut natif (+ `scroll-behavior: smooth` en CSS)
+  // fonctionne déjà correctement, on n'y touche pas.
+  document.querySelectorAll('a[href^="#"]').forEach(function (link) {
+    var channel = document.getElementById(link.getAttribute("href").slice(1));
+    var idx = channel ? channels.indexOf(channel) : -1;
+    if (idx === -1) return;
+    link.addEventListener("click", function (e) {
+      if (!pinned) return;
+      e.preventDefault();
+      var n = channels.length;
+      var rect = stage.getBoundingClientRect();
+      var stageTop = rect.top + window.scrollY;
+      var scrollable = stage.offsetHeight - window.innerHeight;
+      var progress = n > 1 ? idx / (n - 1) : 0;
+      window.scrollTo({ top: stageTop + progress * scrollable, behavior: "smooth" });
+      history.pushState(null, "", link.getAttribute("href"));
+    });
+  });
+
   applyMode();
 })();
