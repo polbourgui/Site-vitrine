@@ -450,7 +450,13 @@
     }
   }
 
-  if (panel && mobileMQ.matches) setCollapsed(true);
+  // Le panneau démarre réduit quelle que soit la largeur d'écran : ouvert,
+  // il chevauche la colonne droite du formulaire de contact sur beaucoup
+  // de résolutions desktop courantes (le panneau est ancré à droite,
+  // le formulaire aussi) et en bloque le bouton d'envoi. Les halos
+  // ambiants restent animés indépendamment de cet état — la page reste
+  // "vivante" à l'arrivée même console fermée.
+  if (panel) setCollapsed(true);
 
   // Sur mobile, la console et le menu (js/main.js) sont deux panneaux
   // fixed superposés : en ouvrir un referme l'autre, pour ne jamais les
