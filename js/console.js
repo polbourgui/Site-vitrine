@@ -426,17 +426,31 @@
 
   // ---- Réduire / agrandir le panneau ----
   var minimizeBtn = document.getElementById("mc-minimize");
-  if (minimizeBtn && panel) {
-    minimizeBtn.addEventListener("pointerdown", function (e) { e.stopPropagation(); });
-    minimizeBtn.addEventListener("click", function () {
-      var collapsed = panel.classList.toggle("is-collapsed");
+  // Même seuil que le CSS (nav mobile, faders empilés) : sous cette
+  // largeur, la console démarre réduite et s'ouvre au tap plutôt qu'au
+  // glissé (un panneau flottant plein écran gênerait le contenu, et le
+  // déplacer au doigt est peu fiable).
+  var mobileMQ = window.matchMedia("(max-width: 860px)");
+
+  function setCollapsed(collapsed) {
+    panel.classList.toggle("is-collapsed", collapsed);
+    if (minimizeBtn) {
       minimizeBtn.textContent = collapsed ? "+" : "−";
       minimizeBtn.setAttribute("aria-label", collapsed ? "Agrandir la console" : "Réduire la console");
       minimizeBtn.setAttribute("aria-expanded", String(!collapsed));
+    }
+  }
+
+  if (panel && mobileMQ.matches) setCollapsed(true);
+
+  if (minimizeBtn && panel) {
+    minimizeBtn.addEventListener("pointerdown", function (e) { e.stopPropagation(); });
+    minimizeBtn.addEventListener("click", function () {
+      setCollapsed(!panel.classList.contains("is-collapsed"));
     });
   }
 
-  // ---- Déplacement du panneau ----
+  // ---- Déplacement du panneau (souris/trackpad uniquement) ----
   if (panel && header) {
     var drag = null;
 
@@ -451,6 +465,7 @@
     }
 
     header.addEventListener("pointerdown", function (e) {
+      if (mobileMQ.matches) return;
       var rect = panel.getBoundingClientRect();
       drag = {
         pointerId: e.pointerId,
@@ -466,8 +481,18 @@
     header.addEventListener("pointerup", function () { drag = null; });
     header.addEventListener("pointercancel", function () { drag = null; });
 
+    // Sur mobile, taper l'en-tête (hors bouton réduire) bascule
+    // l'ouverture de la console, comme un tiroir.
+    header.addEventListener("click", function (e) {
+      if (!mobileMQ.matches) return;
+      if (minimizeBtn && (e.target === minimizeBtn || minimizeBtn.contains(e.target))) return;
+      setCollapsed(!panel.classList.contains("is-collapsed"));
+    });
+
     window.addEventListener("resize", function () {
-      if (panel.style.left) clampAndPlace(parseFloat(panel.style.left), parseFloat(panel.style.top));
+      if (!mobileMQ.matches && panel.style.left) {
+        clampAndPlace(parseFloat(panel.style.left), parseFloat(panel.style.top));
+      }
     });
   }
 
