@@ -12,12 +12,21 @@
     navToggle.addEventListener("click", function () {
       var isOpen = channelNav.classList.toggle("is-open");
       navToggle.setAttribute("aria-expanded", String(isOpen));
+      // Sur mobile, le menu et la mini-console (js/console.js) sont
+      // deux panneaux superposés en position fixed : ouvrir l'un
+      // referme l'autre pour qu'ils ne s'affichent jamais l'un sur
+      // l'autre (voir l'évènement "console:open" écouté ci-dessous).
+      if (isOpen) document.dispatchEvent(new CustomEvent("nav:open"));
     });
     channelNav.querySelectorAll("a").forEach(function (link) {
       link.addEventListener("click", function () {
         channelNav.classList.remove("is-open");
         navToggle.setAttribute("aria-expanded", "false");
       });
+    });
+    document.addEventListener("console:open", function () {
+      channelNav.classList.remove("is-open");
+      navToggle.setAttribute("aria-expanded", "false");
     });
   }
 

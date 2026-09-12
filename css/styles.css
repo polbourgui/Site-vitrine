@@ -108,9 +108,9 @@ button { font: inherit; }
   cursor: pointer;
 }
 .btn-primary { background: var(--accent); color: #171310; }
-.btn-primary:hover { transform: translateY(-1px); background: #f0a35c; }
+.btn-primary:hover, .btn-primary:active { transform: translateY(-1px); background: #f0a35c; }
 .btn-ghost { background: transparent; color: var(--text); border-color: var(--line-strong); }
-.btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+.btn-ghost:hover, .btn-ghost:active { border-color: var(--accent); color: var(--accent); }
 
 /* ---------- Topbar ---------- */
 .topbar {
@@ -148,6 +148,7 @@ button { font: inherit; }
   border-bottom-color: color-mix(in srgb, var(--accent) calc(var(--proximity) * 100%), transparent);
 }
 .channel-nav a.is-active { color: var(--accent); border-bottom-color: var(--accent); }
+.channel-nav a:active { color: var(--accent); }
 
 .nav-toggle {
   display: none;
@@ -369,7 +370,7 @@ button { font: inherit; }
   border-radius: var(--radius);
   cursor: pointer;
 }
-.mc-minimize:hover { color: var(--accent); border-color: var(--accent); }
+.mc-minimize:hover, .mc-minimize:active { color: var(--accent); border-color: var(--accent); }
 
 /* Réduite : seule la barre de titre (déplaçable) reste visible. */
 .mini-console.is-collapsed { max-height: none; overflow: visible; }
@@ -410,7 +411,7 @@ button { font: inherit; }
   cursor: pointer;
   padding: 0 0 0 2px;
 }
-.mc-fixture-remove:hover { color: var(--accent); }
+.mc-fixture-remove:hover, .mc-fixture-remove:active { color: var(--accent); }
 .mc-fixture-add {
   width: 26px;
   height: 26px;
@@ -426,7 +427,7 @@ button { font: inherit; }
   border-radius: var(--radius);
   cursor: pointer;
 }
-.mc-fixture-add:hover { color: var(--accent); border-color: var(--accent); }
+.mc-fixture-add:hover, .mc-fixture-add:active { color: var(--accent); border-color: var(--accent); }
 
 /* ---------- Pan/Tilt (position du halo) ---------- */
 .mc-xy-section { display: flex; flex-direction: column; gap: 10px; }
@@ -469,6 +470,7 @@ button { font: inherit; }
   border-radius: var(--radius);
   cursor: pointer;
 }
+.mc-path-btn:active:not(:disabled) { border-color: var(--accent); color: var(--accent); }
 .mc-path-btn[aria-pressed="true"] { background: var(--accent); color: #171310; border-color: var(--accent); }
 .mc-path-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
@@ -528,6 +530,7 @@ button { font: inherit; }
   border-radius: var(--radius);
   cursor: pointer;
 }
+.mc-effect-btn:active { border-color: var(--accent); color: var(--accent); }
 .mc-effect-btn[aria-pressed="true"] { background: var(--accent); color: #171310; border-color: var(--accent); }
 .mc-note { font-size: 0.78rem; color: var(--text-faint); margin: 18px 0 0; }
 @media (prefers-reduced-motion: reduce) {
@@ -634,7 +637,9 @@ button { font: inherit; }
   padding: 12px 14px;
   color: var(--text);
   font-family: inherit;
-  font-size: 0.95rem;
+  /* 16px minimum : sous ce seuil, Safari iOS zoome automatiquement au
+     focus d'un champ, ce qui casse la mise en page sur mobile. */
+  font-size: 1rem;
   resize: vertical;
 }
 .form-row input:focus,
@@ -734,7 +739,20 @@ button { font: inherit; }
 }
 
 @media (max-width: 860px) {
-  .nav-toggle { display: flex; }
+  /* Cibles tactiles agrandies (~44px) pour les commandes de la
+     mini-console et du menu, dimensionnées pour la souris à la base. */
+  .nav-toggle { display: flex; padding: 14px; }
+  .mc-minimize { width: 44px; height: 44px; }
+  .mc-fixture-add { width: 44px; height: 44px; }
+  .mc-fixture-tab { padding: 10px 12px; }
+  .mc-fixture-remove { padding: 6px; margin: -6px -6px -6px 4px; }
+  .mc-effect-btn { padding: 14px 8px; }
+  .mc-path-btn { padding: 14px 6px; }
+  /* Sur mobile la console est ancrée (pas de glissé libre au doigt) :
+     le bandeau de titre bascule l'ouverture au tap plutôt que de se
+     saisir comme une poignée de déplacement. */
+  .mini-console-header,
+  .mini-console-header:active { cursor: pointer; }
   .channel-nav {
     display: flex;
     position: fixed;
@@ -766,7 +784,18 @@ button { font: inherit; }
   .mc-faders { flex-direction: column; gap: 14px; }
   .mc-fader-group { flex-direction: row; justify-content: space-between; width: 100%; }
   .mc-fader-group .mc-fader { flex: 1; }
-  .mc-track { height: 4px; width: 100%; }
-  .mc-cap { left: calc(var(--mc-value, 0.7) * (100% - 9px)); bottom: 50%; width: 9px; height: 22px; transform: translateY(-50%) scale(calc(1 + var(--proximity, 0) * 0.2)); }
+  /* Piste plus épaisse et curseur agrandi : sur mouse un rail fin est
+     précis, au doigt il faut une cible plus large pour rester
+     saisissable une fois la mise en page basculée à l'horizontale. */
+  .mc-track { height: 6px; width: 100%; }
+  .mc-cap,
+  .mc-cap--h {
+    left: calc(var(--mc-value, 0.7) * (100% - 16px));
+    bottom: 50%;
+    width: 16px;
+    height: 34px;
+    transform: translateY(-50%) scale(calc(1 + var(--proximity, 0) * 0.2));
+  }
+  .mc-track--h { height: 6px; }
   .skill-grid { grid-template-columns: 1fr; }
 }
