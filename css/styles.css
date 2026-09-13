@@ -657,6 +657,9 @@ button { font: inherit; }
 .form-row textarea:focus { outline: none; border-color: var(--accent); }
 .form-submit { margin-top: 4px; width: 100%; }
 .form-note { font-size: 0.85rem; margin: 0; min-height: 1.2em; color: var(--accent); }
+/* Champ piège à bots (Web3Forms) : présent dans le DOM mais invisible et
+   ignoré du clavier/lecteur d'écran — un humain ne le remplit jamais. */
+.hp-field { position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none; }
 
 /* ---------- Footer ---------- */
 .site-footer { border-top: 1px solid var(--line); padding: 24px 0; }

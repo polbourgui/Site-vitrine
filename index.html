@@ -197,7 +197,13 @@
             </ul>
           </div>
 
-          <form class="contact-form" id="contact-form" action="https://formspree.io/f/VOTRE_ID_FORMSPREE" method="POST">
+          <form class="contact-form" id="contact-form" action="https://api.web3forms.com/submit" method="POST">
+            <!-- Clé publique Web3Forms, scopée à hello@technotropisme.online :
+                 elle n'autorise que l'envoi vers cette boîte, ce n'est pas un
+                 secret à protéger côté serveur. -->
+            <input type="hidden" name="access_key" value="00d9da70-78ce-4f15-9323-4d16e35cbb23">
+            <input type="hidden" name="subject" value="Nouveau message — technotropisme.online">
+            <input type="checkbox" name="botcheck" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
             <div class="form-row">
               <label for="name">IN 01 — NOM</label>
               <input type="text" id="name" name="name" required autocomplete="name">
@@ -208,7 +214,7 @@
             </div>
             <div class="form-row">
               <label for="subject">IN 03 — TYPE DE PROJET</label>
-              <input type="text" id="subject" name="subject">
+              <input type="text" id="subject" name="project_type">
             </div>
             <div class="form-row">
               <label for="message">IN 04 — MESSAGE</label>
