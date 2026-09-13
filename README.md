@@ -68,10 +68,14 @@ Sur Cloudflare Pages, la configuration attendue est :
 
 ## À personnaliser avant mise en ligne
 
-- **Formulaire de contact** (`index.html`, section `#contact`) : remplacer
-  `https://formspree.io/f/VOTRE_ID_FORMSPREE` par l'URL de votre formulaire
-  [Formspree](https://formspree.io) (ou un service équivalent) une fois un compte créé.
-- **Coordonnées** : email, téléphone et lien Instagram dans la section `#contact`.
+- **Formulaire de contact** (`index.html`, section `#contact`) : envoie via
+  [Web3Forms](https://web3forms.com) — la clé d'accès (champ caché
+  `access_key`) est scopée à l'adresse de réception configurée sur
+  web3forms.com et n'est pas un secret à protéger côté serveur ; pour la
+  changer, régénérez une clé sur web3forms.com et remplacez la valeur.
+- **Coordonnées** : lien Instagram dans la section `#contact` (email et
+  téléphone volontairement absents : seuls Instagram et le formulaire sont
+  affichés).
 - **Mentions légales** : SIRET et mentions légales dans le pied de page.
 - **Réalisations** : remplacer les blocs `.project-tile` (section `#projets`) par vos projets
   (photo, titre, courte description) au fur et à mesure qu'ils sont disponibles.

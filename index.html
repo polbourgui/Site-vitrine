@@ -198,11 +198,10 @@
           </div>
 
           <form class="contact-form" id="contact-form" action="https://api.web3forms.com/submit" method="POST">
-            <!-- Clé publique Web3Forms (obtenue sur web3forms.com avec
-                 hello@technotropisme.online) : à remplacer avant mise en
-                 ligne. Elle scope uniquement l'envoi vers cette boîte, ce
-                 n'est pas un secret à protéger côté serveur. -->
-            <input type="hidden" name="access_key" value="VOTRE_CLE_WEB3FORMS">
+            <!-- Clé publique Web3Forms, scopée à hello@technotropisme.online :
+                 elle n'autorise que l'envoi vers cette boîte, ce n'est pas un
+                 secret à protéger côté serveur. -->
+            <input type="hidden" name="access_key" value="00d9da70-78ce-4f15-9323-4d16e35cbb23">
             <input type="hidden" name="subject" value="Nouveau message — technotropisme.online">
             <input type="checkbox" name="botcheck" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
             <div class="form-row">
